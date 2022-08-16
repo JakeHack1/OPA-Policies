@@ -1,1026 +1,0 @@
-Google Compute Engine
-Monday, August 1, 2022
-12:07 PM
-
-
-
-Google Compute Engine
-Kind: IAMPolicy
-Kind: IAMPolicyMember
- 
-Image User Role Config
-KCC
-o Control the use of compute.imageUser role
-o IAMPolicyMember  |  Config Connector Documentation  |  Google Cloud 
-
-spec:
-   member: string
-role: compute.imageUser
-
-Terraform[HJ1][BE2]:
-o Allow ‘create’ events for resources of google_organization_iam_policy, google_organization_iam_binding, google_organization_iam_member, google_project_iam_policy, google_project_iam_binding, google_project_iam_member, google_folder_iam_policy, google_folder_iam_binding, google_folder_iam_member and field ‘role’ or ‘binding -> role’ (depending on resource type) has roles (compute.imageUser) if the ‘member’ field has a ‘group’ in the allow list
-o Block ‘create’ events for resources of google_organization_iam_policy, google_organization_iam_binding, google_organization_iam_member, google_project_iam_policy, google_project_iam_binding, google_project_iam_member, google_folder_iam_policy, google_folder_iam_binding, google_folder_iam_member and field ‘role’ or ‘binding -> role’ (depending on resource type) has roles (compute.imageUser) if the ‘member’ field has a ‘group’ not in the allow list
-o Do nothing for ‘no-op’ or ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-Google Compute Engine
-Kind: ComputeInstance
-Kind: ComputeInstanceTemplate
- 
-Image Approval Config
-KCC
-o Block events for resources of type ‘kind: ComputeInstance’ and ‘kind: ComputeInstanceTemplate’ where spec values do not match as described in below table
-o ComputeInstance  |  Config Connector Documentation  |  Google Cloud 
-o ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud
-
-ComputeInstance
-spec:
-  machineType: n1-standard-1
-  zone: us-west1-a
-  bootDisk:
-    initializeParams:
-      size: 24
-      type: pd-ssd
-      sourceImageRef:
-        external: debian-cloud/debian-9
-
-ComputeInstanceTemplate
-
-spec:
-  disk:
-  - sourceImageRef:
-      name: instancetemplate-dep
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeInstancespec.bootDisk.initializeParams.sourceImageRef.externalequalspredefined image listcompute.cnrm.cloud.google.comComputeInstanceTemplatespec.disk.sourceImageRef.nameequalspredefined image list
-
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance” and “google_compute_instance_template” where field 'boot_disk -> initialize_params -> image' is not in a predefined image list.
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-ComputeInstance
-
-{
-resource "google_compute_instance" "default" {
-	name         = "test"
-	machine_type = "e2-medium"
-	zone         = "us-central1-a"
-
-	boot_disk {
-		initialize_params {
-			image = "debian-cloud/debian-9"
-		}
-   }
-   }
-   
-    "resource_changes": [
-        {
-            "type": "google_compute_instance",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "boot_disk": [
-                        {
-                            "auto_delete": true,
-                            "disk_encryption_key_raw": null,
-                            "initialize_params": [
-                                {
-                                    "image": "only-approved-images"
-                                }
-                            ],
-                            "mode": "READ_WRITE"
-                        }
-                    ],
-   
-
-ComputeInstanceTemplate
-
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance_template",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "disk": [
-                        {
-                            "source_image": "Approved Images"
-                        }
-                    ],
-
-
-Google Compute Engine
-Kind: ComputeInstance
-Kind: ComputeInstanceTemplate
- 
-Prevent External IP Config
-KCC
-o Block events for resources of type ‘kind: ComputeInstance’ and ‘kind: ComputeInstanceTemplate’ where spec values do not match as described in the table below
-o ComputeInstance  |  Config Connector Documentation  |  Google Cloud 
-o ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud
-
-ComputeInstance
-
-spec:
-networkInterface:
-  - accessConfig:
-    - natIpRef:
-        external: string
-        name: string
-        namespace: string
-
-ComputeInstanceTemplate
-
-networkInterface:
-  - accessConfig:
-    - natIpRef:
-        external: string
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeInstancespec.networkInterface.accessConfig.natIpRef.externalequalsnullcompute.cnrm.cloud.google.comComputeInstanceTemplatenetworkInterface.accessConfig.natIpRef.externalequalsnull
-
-
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and “google_compute_instance_template” where field 'network_interface -> access_config ' is populated (Omit to ensure that the instance is not accessible from the Internet)
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-ComputeInstance
-
-resource "google_compute_instance" "default" {
-       name         = "test"
-       machine_type = "e2-medium"
-       zone         = "us-central1-a"
-network_interface {
-       network = "default"
-access_config {
-       // Ephemeral public IP
-       }
-}
-}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "before": null,
-                "after": {
-                    "network_interface": [
-                        {
-                            "access_config": [], #Notice access_config is empty
-                            "alias_ip_range": [],
-                            "ipv6_access_config": [],
-                            "network": "default",
-                            "nic_type": null,
-                            "queue_count": null
-                        }
-                    ],
-
-
-ComputeInstanceTemplate
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance_template",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "network_interface": [
-                        {
-                            "access_config": [], # Access_config is empty
-                            "alias_ip_range": [],
-                            "ipv6_access_config": [],
-                            "network": "default",
-                            "network_ip": null,
-                            "nic_type": null,
-                            "queue_count": null
-                        }
-                    ],
-
-
-Google Compute Engine
-Kind: ComputeInstance
-Kind: ComputeInstanceTemplate
- 
-Prevent IP Forwarding Config
-KCC
-o Block events for resources of type 'kind: ComputeInstance’ and ‘kind: ComputeInstanceTemplate’ where spec values do not match as described in below table
-o ComputeInstance  |  Config Connector Documentation  |  Google Cloud
-o ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud
-
-
-ComputeInstance AND ComputeInstanceTemplate
-spec:
-  canIpForward: false
-	
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeInstance, ComputeInstanceTemplatespec.canIpForwardequalsFalse, or ignore if VM instanr project is in exemption list
-
-Terraform
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and “google_compute_instance_template” where field 'resource -> can_ip_forward' equals ‘true’ unless VM instance or project is an exemption list
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-ComputeInstance
-
-{
-resource "google_compute_instance" "default" {
-	name         = "test"
-	machine_type = "e2-medium"
-	zone         = "us-central1-a"
-	can_ip_forward = false
-}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "can_ip_forward": false,
-
-
-ComputeInstanceTemplate
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance_template",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "can_ip_forward": false,
-
-
-
-Google Compute Engine
-Kind: ComputeInstance
-Kind: ComputeInstanceTemplate
- 
-Prevent Default SA Config
-KCC
-o Block events for resources of type 'kind: ComputeInstance’ and ‘kind: ComputeInstanceTemplate’ where spec values do not match as described in below table
-o ComputeInstance  |  Config Connector Documentation  |  Google Cloud
-o ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud
-
-ComputeInstance
-
-spec:
-  serviceAccount:
-    serviceAccountRef:
-      external: gcp_serviceaccount_email
-      name: object_name
-      namespace: object_namespace
-
-ComputeInstanceTemplate
-
-spec:
-  serviceAccount:
-    serviceAccountRef:
-      name: instancetemplate-dep
-
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeInstance, ComputeInstanceTemplatespec.serviceAccount.serviceAccountRef.name or externalequalsAny string value - null not permitting
-
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and “google_compute_instance_template” where field 'service_account -> email' field exists with a string value (when directly referenced)
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-ComputeInstance
-
-{
-resource "google_compute_instance" "default" {
-	name         = "test"
-	machine_type = "e2-medium"
-	zone         = "us-central1-a"
-  	service_account {
-# Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-		email  = google_service_account.email
-		scopes = ["cloud-platform"]
-	}
-}
-}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "service_account": [
-                        {
-                            "email": "google_service_account.email", #Non default
-                            "scopes": [
-                                https://www.googleapis.com/auth/cloud-platform 
-                            ] #separate rule dis-allowing cloud-platform scope
-                        }
-                    ],
-
-
-ComputeInstanceTemplate
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance_template",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "service_account": [
-                        {
-                            "email": "google_service_account.non-default.email",
-                            "scopes": [
-                                "non-cloud-platform"
-                            ]
-                        }
-                    ],
-
-
-
-Google Compute Engine
-Kind: ComputeInstance
-Kind: ComputeInstanceTemplate
- 
-Prevent OSLogin Config[HJ3][BE4]
-KCC
-o Block events for resources of type 'kind: ComputeInstance’ and ‘kind: ComputeInstanceTemplate’ where spec values do not match as described in below table
-o ComputeInstance  |  Config Connector Documentation  |  Google Cloud
-o ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud
-
-ComputeInstance and ComputeInstanceTemplate
-	spec:
-	  metadata:
-                        - key: enable-os-login
-                          value: true
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeInstance, ComputeInstanceTemplatespec.metadata.keyEqualsenable-os-login does not exist, or when exists value = false
-
-
-
-            Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and “google_compute_instance_template” where field 'resource -> metadata -> enable-oslogin' is equal to true
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-
-ComputeInstance
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "metadata": {
-                        "enable-oslogin": "true",
-                        "foo": "bar"
-                    },
-
-ComputeInstanceTemplate
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance_template",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "metadata": {
-                        "enable-oslogin": "true"
-                    },
-
-
-
-Google Compute Engine
-Kind: ComputeInstance
-Kind: ComputeInstanceTemplate
- 
-Enable vTPM, Secure Boot, Integrity Monitoring Config[HJ5][BE6]
-KCC
-o Block events for resources of type 'kind: ComputeInstance’ and ‘kind: ComputeInstanceTemplate’ where spec values do not match as described in below table
-o ComputeInstance  |  Config Connector Documentation  |  Google Cloud
-o ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud
-
-ComputeInstance AND ComputeInstanceTemplate
-
-shieldedInstanceConfig:
-    enableIntegrityMonitoring: true
-    enableSecureBoot: true
-    enableVtpm: true
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeInstance, ComputeInstanceTemplatespec.shieldedInstanceConfig.enableIntegrityMonitoringequalstruecompute.cnrm.cloud.google.comComputeInstance, ComputeInstanceTemplatespec.shieldedInstanceConfig.enableSecureBootequalstruecompute.cnrm.cloud.google.comComputeInstance, ComputeInstanceTemplatespec.shieldedInstanceConfig.enableVtpmequalstrue
-
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and “google_compute_instance_template” where field 'shielded_instance_config -> enable_secure_boot, enable_vtpm, enable_integrity_monitoring'  fields are not equal to true
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-ComputeInstance
-
-resource "google_compute_instance" "default" {
-	name         = "test"
-	machine_type = "e2-medium"
-	zone         = "us-central1-a"
-	shielded_instance_config {
-		enable_secure_boot = true,
-		enable_vtpm = true,
-		enable_integrity_monitoring = true
-	}
-}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "shielded_instance_config": [
-                        {
-                            "enable_integrity_monitoring": true,
-                            "enable_secure_boot": true,
-                            "enable_vtpm": true
-                        }
-                    ],
-
-
-ComputeInstanceTemplate
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance_template",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "shielded_instance_config": [
-                        {
-                            "enable_integrity_monitoring": true,
-                            "enable_secure_boot": true,
-                            "enable_vtpm": true
-                        }
-                    ],
-
-
-Google Compute Engine
-Kind: ComputeInstance
-Kind: ComputeInstanceTemplate
-
-CMEK for Persistent Disks Config
-KCC
-o Block events for resources of type 'kind: ComputeInstance’ and ‘kind: ComputeInstanceTemplate’ where spec values do not match as described in below table
-o ComputeInstance  |  Config Connector Documentation  |  Google Cloud
-o ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud
-
-ComputeInstance
-
-bootDisk:
-  kmsKeyRef:
-      external: string
-      name: string
-      namespace: string
-attachedDisk:
-  kmsKeyRef:
-      external: string
-      name: string
-      namespace: string
-
-ComputeInstanceTemplate
-
-disk:
-  diskEncryptionKey:
-    kmsKeyRef:
-      external: string
-      name: string
-      namespace: string
-  
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeInstancebootDisk.kmsKeyRefMust existExternal or name fields must exist to set CMEK keycompute.cnrm.cloud.google.comComputeInstanceattachedDisk.kmsKeyRefMust existExternal or name fields must exist to set CMEK keycompute.cnrm.cloud.google.comComputeInstanceTemplatedisk.diskEncryption.kmsKeyRefMust existExternal or name fields must exist to set CMEK key
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and “google_compute_instance_template” where field 'boot_disk -> kms_key_self_link, or attached_disk -> kms_key_self_link'  fields don’t use CMEK for persistent disks (boot_disk required, attached_disk field may not exist but CMEK is required if it does exist)
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-ComputeInstance
-
-{
-resource "google_compute_instance" "default" {
-	name         = "test"
-	machine_type = "e2-medium"
-	zone         = "us-central1-a"
-
-	boot_disk {
-		initialize_params {
-			image = "debian-cloud/debian-9"
-		}
-	kms_key_self_link = __________
-	}
-
-	attached_disk {
-		kms_key_self_link = ________
-	}
-}
-}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "attached_disk": [
-                        {
-                            "kms_key_self_link": "CMEK Key",
-                            "source": "Approved Image"
-                        }
-                    ],
-                    "boot_disk": [
-                        {
-                            "initialize_params": [
-                                {
-                                    "image": "debian-cloud/debian-9"
-                                }
-                            ],
-                            "kms_key_self_link": "CMEK Key",
-                        }
-                    ],
-
-
-ComputeInstanceTemplate
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance_template",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "disk": [
-                        {
-                            "disk_encryption_key": [
-                                {
-                                    "kms_key_self_link": "CMEK Key"
-                                }
-                            ],
-                        }
-                    ],
-
-
-Google Compute Engine
-Kind: ComputeInstance
-Kind: ComputeInstanceTemplate
-
-Block Cloud-Platform Access Scopes Config
-KCC
-o Block events for resources of type 'kind: ComputeInstance’ and ‘kind: ComputeInstanceTemplate’ where spec values do not match as described in below table
-o ComputeInstance  |  Config Connector Documentation  |  Google Cloud
-o ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud
-
-ComputeInstance AND ComputeInstanceTemplate
-
-	spec:
-	  serviceAccount:
-	    scopes:
-	     - string
-	
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeInstance, ComputeInstanceTemplatespec.serviceAccount.scopesNot equal‘cloud-platform’
-
-
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and “google_compute_instance_template” where field 'resource -> service_account -> scopes'  is equal to ‘cloud-platform’
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-ComputeInstance
-
-{
-resource "google_compute_instance" "default" {
-	name         = "test"
-	machine_type = "e2-medium"
-	zone         = "us-central1-a"
-
-	service_account {
-# Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    		email  = google_service_account.default.email
-   		scopes = ["cloud-platform"]
-  	}
-}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "service_account": [
-                        {
-                            "email": "google_service_account.email",
-                            "scopes": [
-                                “cloud-platform”
-                            ]
-
-
-ComputeInstanceTemplate
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance_template",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "service_account": [
-                        {
-                            "email": "google_service_account.non-default.email",
-                            "scopes": [
-                                "cloud-platform"
-                            ]
-                        }
-                    ],
-Google Compute Engine
-Kind: ComputeInstance
-Kind: ComputeInstanceTemplate
-
-Disallow use of Local SSD Config
-“Scratch Disks” – aka Local SSD’s – do not support KMS encryption keys.
-KCC
-o Block events for resources of type 'kind: ComputeInstance’ and ‘kind: ComputeInstanceTemplate’ where spec values do not match as described in below table
-o ComputeInstance  |  Config Connector Documentation  |  Google Cloud
-o ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud
-
-ComputeInstance
-
-	spec:
-	  scratchDisk[HJ7][BE8]:
-	   - interface:
-
-ComputeInstanceTemplate
-
-	spec:
-	  disk:
-	    diskType: local-ssd
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeInstancespec.scratchDisk.interfaceNot ExistShould not be attached so field should not exist
-compute.cnrm.cloud.google.comComputeInstanceTemplatespec.disk.diskTypeNot equallocal-ssd
-
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and “google_compute_instance_template” where field 'resource -> scratch_disk’ exists (no Local SSD’s attached)
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-ComputeInstance
-
-{
-resource "google_compute_instance" "default" {
-	name         = "test"
-	machine_type = "e2-medium"
-	zone         = "us-central1-a"
-
-	scratch_disk {
-		interface = “SCSI”
-	}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "scratch_disk": [
-                        {
-                            "interface": "SCSI"
-                        }
-                    ],
-
-
-ComputeInstanceTemplate
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance_template",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-
-                    "disk": [
-                        {
-                            "interface": "SCSI"
-                        }
-                    ],
-
-
-Google Compute Engine
-Kind: ComputeInstance
-Kind: ComputeInstanceTemplate
-
-Require ‘block-project-ssh-keys’ Config
-KCC
-o Block events for resources of type 'kind: ComputeInstance’ and ‘kind: ComputeInstanceTemplate’ where spec values do not match as described in below table
-o ComputeInstance  |  Config Connector Documentation  |  Google Cloud
-o ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud
-
-ComputeInstance[HJ9]
-
-	spec:
-	  metadata:
-                        - key: block-project-ssh-keys
-                          value: true
-
-ComputeInstanceTemplate
-
-	metadata:
-	  - key: block-project-ssh-keys
-                          value: true
-
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeInstancespec.metadata.key / .valueequalsblock-project-ssh-keys / true compute.cnrm.cloud.google.comComputeInstanceTemplatespec.metadata.key / .valueequalsblock-project-ssh-keys / true
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and “google_compute_instance_template” where field 'resource -> metadata -> block_project_ssh_keys’  is not equal to “true”
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-ComputeInstance
-
-{
-resource "google_compute_instance" "default" {
-	name         = "test"
-	machine_type = "e2-medium"
-	zone         = "us-central1-a"
-
-		metadata {
-			block_project_ssh_keys = “true”
-		}
-}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "metadata": {
-                        "block_project_ssh_keys": "true",
-                    },
-
-
-ComputeInstanceTemplate
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance_template",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "metadata": {
-                        "block_project_ssh_keys": "true"
-                    },
-
-
-
-Google Compute Engine
-Kind: ComputeInstance
-Kind: ComputeInstanceTemplate
-
-Block Virtual Displays Config
-KCC
-o Block events for resources of type 'kind: ComputeInstance’ and ‘kind: ComputeInstanceTemplate’ where spec values do not match as described in below table
-o ComputeInstance  |  Config Connector Documentation  |  Google Cloud
-o ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud
-
-ComputeInstance
-
-            Spec:
-	enableDisplay: false
-
-ComputeInstanceTemplate
-
-	sepc:
-	  enableDisplay: false
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeInstancespec.enableDisplayequalfalse
-compute.cnrm.cloud.google.comComputeInstanceTemplatespec.enableDisplayequalfalse
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and “google_compute_instance_template” where field 'resource -> enable_display'  is not equal to “false”
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-ComputeInstance
-
-{
-resource "google_compute_instance" "default" {
-	name         = "test"
-	machine_type = "e2-medium"
-	zone         = "us-central1-a"
-		enable_display = false
-}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_instance",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "enable_display": false,
-                    },
-
-
-ComputeInstanceTemplate[HJ10][BE11]
-
-
-Google Compute Engine
-Kind: ComputeDisk
-
-CMEK for Persistent Disks Config
-KCC
-o Block events for resources of type 'kind: ComputeDisk’ where spec values do not match as described in below table
-o ComputeDisk  |  Config Connector Documentation  |  Google Cloud
-
-ComputeDisk
-
-	spec:
-	  diskEncryptionKey:
-	    kmsKeyRef:
-	      external: string
-	      name: string
-	      namespace: string
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeDiskspec.diskEncryptionKey.kmsKeyRef.external/name/namespaceequalExternal or name must exist
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_disk" where field 'resource -> disk_encryption_key -> kms_key_self_link’ is not populated 
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-ComputeDisk
-
-	resource "google_compute_disk" "default" {
-  		name  = "test-disk"
-type  = "pd-ssd"
-zone  = "us-central1-a"
-image = "debian-9-stretch-v20200805"
-labels = {
-	environment = "dev"
-		}
-
-physical_block_size_bytes = 4096
-
-disk_ecryption_key {
-	kms_key_self_link = “”
-}
-	}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_disk",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "disk_encryption_key": [
-                        {
-                            "kms_key_self_link": "CMEK Key",
-                            "kms_key_service_account": null,
-                            "raw_key": null
-                        }
-                    ],
-
-
-
-Google Compute Engine
-Kind: ComputeDisk
-
-Approved Imaged for Persistent Disks Config
-KCC
-o Block events for resources of type 'kind: ComputeDisk’ where spec values do not match as described in below table
-o ComputeDisk  |  Config Connector Documentation  |  Google Cloud
-
-ComputeDisk
-
-	spec:
-	  imageRef:
-	    external: string
-	    name: string
-	    namespace: string
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeDiskspec.imageRef.external/name/namespaceequalApproved images
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_disk" where field 'resource -> image’ is equal to an approved image 
-o Do nothing for ‘delete’ events
-o Ignore the allow list if the ‘project’ is in the exemption list -> i.e., do not enforce the rule if the ‘project’ is in an exemption list.
-
-ComputeDisk
-
-	resource "google_compute_disk" "default" {
-  		name  = "test-disk"
-type  = "pd-ssd"
-zone  = "us-central1-a"
-image = "approved-image"
-labels = {
-	environment = "dev"
-		}
-
-physical_block_size_bytes = 4096
-	}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_disk",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "image": "Approved Images",
-                    },
-
-
-
-Google Compute Engine
-Kind: ComputeDisk
-
-Disallow use of Local SSD Config
-KCC
-o Block events for resources of type 'kind: ComputeDisk’ where spec values do not match as described in below table
-o ComputeDisk  |  Config Connector Documentation  |  Google Cloud
-
-ComputeDisk
-
-	spec:
-	  type: pd-ssd
-
-APIKindKeyConditionalValuecompute.cnrm.cloud.google.comComputeDiskspec.typeNot equallocal-ssd
-Terraform:
-o Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_disk" where field 'resource -> type’ is equal to “local-ssd”
-o Do nothing for 'delete' events
-
-ComputeDisk
-
-	resource "google_compute_disk" "default" {
-  		name  = "test-disk"
-type  = "local-ssd"
-zone  = "us-central1-a"
-image = " debian-9-stretch-v20200805"
-labels = {
-	environment = "dev"
-		}
-
-physical_block_size_bytes = 4096
-	}
-
-    "resource_changes": [
-        {
-            "type": "google_compute_disk",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "after": {
-                    "type": "local-ssd", #block local-ssd
-                },[BE12]
-
-[HJ1]Example IAM terraform?
-[BE2R1]This isn’t needed – the team has already coded for it. But if you want for reference see the TF resource types in the description
-[HJ3]Cannot find OSLogin enablement config for KCC
-[BE4R3]It would be metadata - updated
-[HJ5]Cannot find ‘Measured Boot’ enablement in spec/documentation
-[BE6R5]Seems to be an error on client side – removed
-[HJ7]The excel sheet says scratchDisk but spec.bootDisk.initializeParams.type = pd-ssd may be better
-[BE8R7]Pd-ssd is Persistent Disk SSD – scratchDisk is ‘local SSD’ – local SSD is physically co-located with the VM server, where as PD disks are effectively network disks.
-[HJ9]No direct link to ssh keys
-[HJ10]Enable_display is in the ‘beta’ version for compute instance template
-[BE11R10]Ok – so not supported at this time. Won’t incldue
-[BE12]Turns out this isn’t supported so canceled
