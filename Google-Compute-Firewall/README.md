@@ -55,8 +55,7 @@ spec:
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
-| compute.cnrm.cloud.google.com | ComputeFirewall | spec.logConfig.metadata
- | equals | INLCUDE_ALL_METADATA |
+| compute.cnrm.cloud.google.com | ComputeFirewall | spec.logConfig.metadata | equals | INLCUDE_ALL_METADATA |
 
 **Terraform:**
 
@@ -96,11 +95,9 @@ spec:
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
-| compute.cnrm.cloud.google.com | ComputeFirewall | spec.sourceRanges
- | Not equal to | 0.0.0.0/0 |
+| compute.cnrm.cloud.google.com | ComputeFirewall | spec.sourceRanges | Not equal to | 0.0.0.0/0 |
 | --- | --- | --- | --- | --- |
-| compute.cnrm.cloud.google.com | ComputeFirewall | spec.destinationRanges
- | Not equal to | 0.0.0.0/0 |
+| compute.cnrm.cloud.google.com | ComputeFirewall | spec.destinationRanges | Not equal to | 0.0.0.0/0 |
 
 **Terraform:**
 
@@ -138,11 +135,9 @@ spec:
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
-| compute.cnrm.cloud.google.com | ComputeFirewall | spec.sourceRanges
- | Equals | An allowed CIDR range |
+| compute.cnrm.cloud.google.com | ComputeFirewall | spec.sourceRanges | Equals | An allowed CIDR range |
 | --- | --- | --- | --- | --- |
-| compute.cnrm.cloud.google.com | ComputeFirewall | spec.destinationRanges
- | Equals | An allowed CIDR range |
+| compute.cnrm.cloud.google.com | ComputeFirewall | spec.destinationRanges | Equals | An allowed CIDR range |
 
 **Terraform:**
 
