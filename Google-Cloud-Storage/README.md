@@ -264,7 +264,7 @@ Google_storage_bucket_access_control
 ```json
 "resource_changes": [
 {
-    "type": "google\_storage\_bucket",
+    "type": "google_storage_bucket",
     "change": {
         "actions": [
             "create"
@@ -276,48 +276,48 @@ Google_storage_bucket_access_control
 
 Google_storage_bucket_acl
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_storage\_bucket",
+    "type": "google_storage_bucket",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "role\_entity": [
-                "OWNER:allowed\_owner@gmail.com",
-                "READER:allowed\_group-mygroup"
+            "role_entity": [
+                "OWNER:allowed_owner@gmail.com",
+                "READER:allowed_group-mygroup"
             ]
         },
 ```
 
 Google_storage_bucket_iam_policy
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_storage\_bucket\_iam\_policy",
+    "type": "google_storage_bucket_iam_policy",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
             "bucket": "bucket",
-            "policy\_data": "{\"bindings\":[{\"members\":[\"user:allowed\_user@example.com\"],\"role\":\"roles/storage.admin\"}]}"
+            "policy_data": "{"bindings":[{"members":["user:allowed_user@example.com"],"role":"roles/storage.admin"}]}"
         },
 ```
 
 Google_storage_bucket_iam_policy_binding
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_storage\_bucket\_iam\_binding",
+    "type": "google_storage_bucket_iam_binding",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
             "members": [
-                "user:allowed\_user@example.com"
+                "user:allowed_user@example.com"
             ],
             "role": "roles/storage.admin"
         },
@@ -348,9 +348,9 @@ spec:
 
 Google_storage_bucket_access_control
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_storage\_bucket",
+    "type": "google_storage_bucket",
     "change": {
         "actions": [
             "create"
@@ -362,41 +362,41 @@ Google_storage_bucket_access_control
 
 Google_storage_bucket_acl
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_storage\_bucket",
+    "type": "google_storage_bucket",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "role\_entity": [
-                "OWNER:allowed\_owner@gmail.com",
-                "READER:allowed\_group-mygroup"
+            "role_entity": [
+                "OWNER:allowed_owner@gmail.com",
+                "READER:allowed_group-mygroup"
             ]
         },
 ```
 
 Google_storage_bucket_iam_policy
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_storage\_bucket\_iam\_policy",
+    "type": "google_storage_bucket_iam_policy",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
             "bucket": "bucket",
-            "policy\_data": "{\"bindings\":[{\"members\":[\"user:allowed\_user@example.com\"],\"role\":\"roles/storage.owner\"}]}"
+            "policy_data": "{"bindings":[{"members":["user:allowed_user@example.com"],"role":"roles/storage.owner"}]}"
         },
 ```
 
 Google_storage_bucket_iam_policy_binding
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_storage\_bucket\_iam\_binding",
+    "type": "google_storage_bucket_iam_binding",
     "change": {
         "actions": [
             "create"
