@@ -9,7 +9,6 @@ Monday, August 8, 2022
 **KCC**
 Kind: StorageBucket
 
-
 - Block events for resources of type 'kind: StorageBucket' where spec values do not match as described in below table
 - [StorageBucket  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/storage/storagebucket)
 
@@ -20,6 +19,7 @@ spec:
       external: string
       name: string
       namespace: string
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
