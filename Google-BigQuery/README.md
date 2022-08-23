@@ -32,15 +32,15 @@ spec:
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-"type": "google\_bigquery\_dataset",
+"type": "google_bigquery_dataset",
 "change": {
     "actions": [
         "create"
     ],
     "after": {
-        "default\_encryption\_configuration": [
+        "default_encryption_configuration": [
             {}
         ],
     },
@@ -70,9 +70,9 @@ spec:
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_bigquery\_dataset",
+    "type": "google_bigquery_dataset",
     "change": {
         "actions": [
             "create"
@@ -110,17 +110,17 @@ spec:
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_bigquery\_dataset",
+    "type": "google_bigquery_dataset",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "encryption\_configuration": [
+            "encryption_configuration": [
                 {
-                    "kms\_key\_name": "CMEK"
+                    "kms_key_name": "CMEK"
                 }
             ],
 ```
