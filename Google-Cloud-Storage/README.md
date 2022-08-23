@@ -302,7 +302,7 @@ Google_storage_bucket_iam_policy
         ],
         "after": {
             "bucket": "bucket",
-            "policy_data": "{"bindings":[{"members":["user:allowed_user@example.com"],"role":"roles/storage.admin"}]}"
+            "policy_data": "{\"bindings\":[{\"members\":[\"user:allowed_user@example.com\"],\"role\":\"roles/storage.admin\"}]}"
         },
 ```
 
@@ -388,7 +388,7 @@ Google_storage_bucket_iam_policy
         ],
         "after": {
             "bucket": "bucket",
-            "policy_data": "{"bindings":[{"members":["user:allowed_user@example.com"],"role":"roles/storage.owner"}]}"
+            "policy_data": "{\"bindings\":[{\"members\":[\"user:allowed_user@example.com\"],\"role\":\"roles/storage.owner\"}]}"
         },
 ```
 
