@@ -21,8 +21,8 @@ spec:
 
 **Terraform:**
 
-- Allow 'create' events for resources of google\_organization\_iam\_policy, google\_organization\_iam\_binding, google\_organization\_iam\_member, google\_project\_iam\_policy, google\_project\_iam\_binding, google\_project\_iam\_member, google\_folder\_iam\_policy, google\_folder\_iam\_binding, google\_folder\_iam\_member and field 'role' or 'binding -\> role' (depending on resource type) has roles (compute.imageUser) if the 'member' field has a 'group' in the allow list
-- Block 'create' events for resources of google\_organization\_iam\_policy, google\_organization\_iam\_binding, google\_organization\_iam\_member, google\_project\_iam\_policy, google\_project\_iam\_binding, google\_project\_iam\_member, google\_folder\_iam\_policy, google\_folder\_iam\_binding, google\_folder\_iam\_member and field 'role' or 'binding -\> role' (depending on resource type) has roles (compute.imageUser) if the 'member' field has a 'group' not in the allow list
+- Allow 'create' events for resources of google_organization_iam_policy, google_organization_iam_binding, google_organization_iam_member, google_project_iam_policy, google_project_iam_binding, google_project_iam_member, google_folder_iam_policy, google_folder_iam_binding, google_folder_iam_member and field 'role' or 'binding -\> role' (depending on resource type) has roles (compute.imageUser) if the 'member' field has a 'group' in the allow list
+- Block 'create' events for resources of google_organization_iam_policy, google_organization_iam_binding, google_organization_iam_member, google_project_iam_policy, google_project_iam_binding, google_project_iam_member, google_folder_iam_policy, google_folder_iam_binding, google_folder_iam_member and field 'role' or 'binding -\> role' (depending on resource type) has roles (compute.imageUser) if the 'member' field has a 'group' not in the allow list
 - Do nothing for 'no-op' or 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
@@ -67,23 +67,23 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_instance"and "google\_compute\_instance\_template" where field 'boot\_disk -\> initialize\_params -\> image' is not in a predefined image list.
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance"and "google_compute_instance_template" where field 'boot_disk -\> initialize_params -\> image' is not in a predefined image list.
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance",
+    "type": "google_compute_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "boot\_disk": [
+            "boot_disk": [
                 {
-                    "initialize\_params": [
+                    "initialize_params": [
                         {
                             "image": "only-approved-images"
                         }
@@ -94,9 +94,9 @@ ComputeInstance
 
 ComputeInstanceTemplate
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance\_template",
+    "type": "google_compute_instance_template",
     "change": {
         "actions": [
             "create"
@@ -104,7 +104,7 @@ ComputeInstanceTemplate
         "after": {
             "disk": [
                 {
-                    "source\_image": "Approved Images"
+                    "source_image": "Approved Images"
                 }
             ],
 ```
@@ -145,40 +145,40 @@ networkInterface:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_instance" and "google\_compute\_instance\_template" where field 'network\_interface -\> access\_config ' is populated (Omit to ensure that the instance is not accessible from the Internet)
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and "google_compute_instance_template" where field 'network_interface -\> access_config ' is populated (Omit to ensure that the instance is not accessible from the Internet)
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance",
+    "type": "google_compute_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "network\_interface": [
+            "network_interface": [
                 {
-                    "access\_config": [], #Notice access\_config is empty
+                    "access_config": [], #Notice access_config is empty
                 }
             ],
 ```
 
 ComputeInstanceTemplate
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance\_template",
+    "type": "google_compute_instance_template",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "network\_interface": [
+            "network_interface": [
                 {
-                    "access\_config": [], # Access\_config is empty
+                    "access_config": [], # Access_config is empty
                 }
             ],
 ```
@@ -206,35 +206,35 @@ spec:
 
 **Terraform**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_instance" and "google\_compute\_instance\_template"where field 'resource -\> can\_ip\_forward' equals 'true' unless VM instance or project is an exemption list
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and "google_compute_instance_template"where field 'resource -\> can_ip_forward' equals 'true' unless VM instance or project is an exemption list
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance",
+    "type": "google_compute_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "can\_ip\_forward": false,
+            "can_ip_forward": false,
         }
 ```
 
 ComputeInstanceTemplate
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance\_template",
+    "type": "google_compute_instance_template",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "can\_ip\_forward": false,
+            "can_ip_forward": false,
         }
 ```
 
@@ -254,9 +254,9 @@ ComputeInstance
 spec:
   serviceAccount:
     serviceAccountRef:
-      external: gcp\_serviceaccount\_email
-      name: object\_name
-      namespace: object\_namespace
+      external: gcp_serviceaccount_email
+      name: object_name
+      namespace: object_namespace
 ```
 
 ComputeInstanceTemplate
@@ -274,23 +274,23 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_instance" and "google\_compute\_instance\_template" where field 'service\_account -\> email' field exists with a string value (when directly referenced)
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and "google_compute_instance_template" where field 'service_account -\> email' field exists with a string value (when directly referenced)
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance",
+    "type": "google_compute_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "service\_account": [
+            "service_account": [
                 {
-                    "email": "google\_service\_account.email", #Non default
+                    "email": "google_service_account.email", #Non default
                     "scopes": [
                         [https://www.googleapis.com/auth/cloud-platform](https://www.googleapis.com/auth/cloud-platform)
                     ] #separate rule dis-allowing cloud-platform scope
@@ -300,17 +300,17 @@ ComputeInstance
 
 ComputeInstanceTemplate
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance\_template",
+    "type": "google_compute_instance_template",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "service\_account": [
+            "service_account": [
                 {
-                    "email": "google\_service\_account.non-default.email",
+                    "email": "google_service_account.non-default.email",
                     "scopes": [
                         "non-cloud-platform"
                     ]
@@ -344,15 +344,15 @@ value: true
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_instance" and "google\_compute\_instance\_template" where field 'resource -\> metadata -\> enable-oslogin' is equal to true
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and "google_compute_instance_template" where field 'resource -\> metadata -\> enable-oslogin' is equal to true
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance",
+    "type": "google_compute_instance",
     "change": {
         "actions": [
             "create"
@@ -365,9 +365,9 @@ ComputeInstance
 
 ComputeInstanceTemplate
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance\_template",
+    "type": "google_compute_instance_template",
     "change": {
         "actions": [
             "create"
@@ -406,44 +406,44 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_instance" and "google\_compute\_instance\_template" where field 'shielded\_instance\_config -\> enable\_secure\_boot, enable\_vtpm, enable\_integrity\_monitoring' fields are not equal to true
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and "google_compute_instance_template" where field 'shielded_instance_config -\> enable_secure_boot, enable_vtpm, enable_integrity_monitoring' fields are not equal to true
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance",
+    "type": "google_compute_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "shielded\_instance\_config": [
+            "shielded_instance_config": [
                 {
-                    "enable\_integrity\_monitoring": true,
-                    "enable\_secure\_boot": true,
-                    "enable\_vtpm": true
+                    "enable_integrity_monitoring": true,
+                    "enable_secure_boot": true,
+                    "enable_vtpm": true
                 }
             ],
 ```
 
 ComputeInstanceTemplate
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance\_template",
+    "type": "google_compute_instance_template",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "shielded\_instance\_config": [
+            "shielded_instance_config": [
                 {
-                    "enable\_integrity\_monitoring": true,
-                    "enable\_secure\_boot": true,
-                    "enable\_vtpm": true
+                    "enable_integrity_monitoring": true,
+                    "enable_secure_boot": true,
+                    "enable_vtpm": true
                 }
             ],
 ```
@@ -493,43 +493,43 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_instance" and "google\_compute\_instance\_template" where field 'boot\_disk -\> kms\_key\_self\_link, or attached\_disk -\> kms\_key\_self\_link' fields don't use CMEK for persistent disks (boot\_disk required, attached\_disk field may not exist but CMEK is required if it does exist)
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and "google_compute_instance_template" where field 'boot_disk -\> kms_key_self_link, or attached_disk -\> kms_key_self_link' fields don't use CMEK for persistent disks (boot_disk required, attached_disk field may not exist but CMEK is required if it does exist)
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance",
+    "type": "google_compute_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "attached\_disk": [
+            "attached_disk": [
                 {
-                    "kms\_key\_self\_link": "CMEK Key",
+                    "kms_key_self_link": "CMEK Key",
                     "source": "Approved Image"
                 }
             ],
-            "boot\_disk": [
+            "boot_disk": [
                 {
-                    "initialize\_params": [
+                    "initialize_params": [
                         {
                             "image": "debian-cloud/debian-9"
                         }
                     ], 
-                    "kms\_key\_self\_link": "CMEK Key",
+                    "kms_key_self_link": "CMEK Key",
                 }
             ],
 ```
 
 ComputeInstanceTemplate
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance\_template",
+    "type": "google_compute_instance_template",
     "change": {
         "actions": [
             "create"
@@ -537,9 +537,9 @@ ComputeInstanceTemplate
         "after": {
             "disk": [
                 {
-                    "disk\_encryption\_key": [
+                    "disk_encryption_key": [
                         {
-                            "kms\_key\_self\_link": "CMEK Key"
+                            "kms_key_self_link": "CMEK Key"
                         }
                     ],
                 }
@@ -572,23 +572,23 @@ spec
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_instance" and "google\_compute\_instance\_template" where field 'resource -\> service\_account -\> scopes' is equal to 'cloud-platform'
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and "google_compute_instance_template" where field 'resource -\> service_account -\> scopes' is equal to 'cloud-platform'
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance",
+    "type": "google_compute_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "service\_account": [
+            "service_account": [
                 {
-                    "email": "google\_service\_account.email",
+                    "email": "google_service_account.email",
                     "scopes": [
                         "cloud-platform"
                     ]
@@ -596,17 +596,17 @@ ComputeInstance
 
 ComputeInstanceTemplate
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance\_template",
+    "type": "google_compute_instance_template",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "service\_account": [
+            "service_account": [
                 {
-                    "email": "google\_service\_account.non-default.email",
+                    "email": "google_service_account.non-default.email",
                     "scopes": [
                         "cloud-platform"
                     ]
@@ -650,21 +650,21 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_instance" and "google\_compute\_instance\_template" where field 'resource -\> scratch\_disk' exists (no Local SSD's attached)
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and "google_compute_instance_template" where field 'resource -\> scratch_disk' exists (no Local SSD's attached)
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
 ``json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance",
+    "type": "google_compute_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "scratch\_disk": [
+            "scratch_disk": [
                 {
                     "interface": "SCSI"
                 }
@@ -673,9 +673,9 @@ ComputeInstance
 
 ComputeInstanceTemplate
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance\_template",
+    "type": "google_compute_instance_template",
     "change": {
         "actions": [
             "create"
@@ -723,37 +723,37 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_instance" and "google\_compute\_instance\_template" where field 'resource -\> metadata -\> block\_project\_ssh\_keys' is not equal to "true"
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and "google_compute_instance_template" where field 'resource -\> metadata -\> block_project_ssh_keys' is not equal to "true"
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance",
+    "type": "google_compute_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
             "metadata": {
-                "block\_project\_ssh\_keys": "true",
+                "block_project_ssh_keys": "true",
             },
 ```
 
 ComputeInstanceTemplate
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance\_template",
+    "type": "google_compute_instance_template",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
             "metadata": {
-                "block\_project\_ssh\_keys": "true"
+                "block_project_ssh_keys": "true"
             },
 ```
 
@@ -789,21 +789,21 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_instance" and "google\_compute\_instance\_template" where field 'resource -\> enable\_display' is not equal to "false"
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_instance" and "google_compute_instance_template" where field 'resource -\> enable_display' is not equal to "false"
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_instance",
+    "type": "google_compute_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "enable\_display": false,
+            "enable_display": false,
         },
 ```
 
@@ -831,25 +831,25 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_disk" where field 'resource -\> disk\_encryption\_key -\> kms\_key\_self\_link' is not populated
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_disk" where field 'resource -\> disk_encryption_key -\> kms_key_self_link' is not populated
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeDisk
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_disk",
+    "type": "google_compute_disk",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "disk\_encryption\_key": [
+            "disk_encryption_key": [
                 {
-                    "kms\_key\_self\_link": "CMEK Key",
-                    "kms\_key\_service\_account": null,
-                    "raw\_key": null
+                    "kms_key_self_link": "CMEK Key",
+                    "kms_key_service_account": null,
+                    "raw_key": null
                 }
             ],
 ```
@@ -877,15 +877,15 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_disk" where field 'resource -\> image' is equal to an approved image
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_disk" where field 'resource -\> image' is equal to an approved image
 - Do nothing for 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeDisk
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_disk",
+    "type": "google_compute_disk",
     "change": {
         "actions": [
             "create"
@@ -915,14 +915,14 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_disk" where field 'resource -\> type' is equal to "local-ssd"
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_compute_disk" where field 'resource -\> type' is equal to "local-ssd"
 - Do nothing for 'delete' events
 
 ComputeDisk
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_disk",
+    "type": "google_compute_disk",
     "change": {
         "actions": [
             "create"
