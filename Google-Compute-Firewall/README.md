@@ -18,6 +18,7 @@ spec:
 ```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
+| --- | --- | --- | --- | --- |
 | compute.cnrm.cloud.google.com | ComputeFirewall | spec.description
  | equals | Non-null valuex |
 
