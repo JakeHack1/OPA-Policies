@@ -4,24 +4,20 @@ Monday, August 1, 2022
 
 12:07 PM
 
-**Google Compute Engine**
-
-Kind: IAMPolicy
-
-Kind: IAMPolicyMember
-
-**Image User Role Config**
+## Image User Role Config
 
 **KCC**
+Kind: IAMPolicy
+Kind: IAMPolicyMember
 
 - Control the use of compute.imageUser role
 - [IAMPolicyMember  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/iam/iampolicymember)
 
+```yaml
 spec:
-
-member: string
-
-role: compute.imageUser
+  member: string
+    role: compute.imageUser
+```
 
 **Terraform:**
 
@@ -30,15 +26,11 @@ role: compute.imageUser
 - Do nothing for 'no-op' or 'delete' events
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
-**Google Compute Engine**
-
-Kind: ComputeInstance
-
-Kind: ComputeInstanceTemplate
-
-**Image Approval Config**
+## Image Approval Config
 
 **KCC**
+Kind: ComputeInstance
+Kind: ComputeInstanceTemplate
 
 - Block events for resources of type 'kind: ComputeInstance' and 'kind: ComputeInstanceTemplate' where spec values do not match as described in below table
 - [ComputeInstance  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstance)
@@ -46,6 +38,7 @@ Kind: ComputeInstanceTemplate
 
 ComputeInstance
 
+```yaml
 spec:
  machineType: n1-standard-1
    zone: us-west1-a
@@ -56,16 +49,15 @@ spec:
       type: pd-ssd
        sourceImageRef:
          external: debian-cloud/debian-9
+```
 
 ComputeInstanceTemplate
-
+```yaml
 spec:
-
-disk:
-
-- sourceImageRef:
-
-name: instancetemplate-dep
+  disk:
+  - sourceImageRef:
+      name: instancetemplate-dep
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -80,131 +72,70 @@ name: instancetemplate-dep
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
-
+```json
+"resource\_changes": [
 {
-
-resource "google\_compute\_instance" "default" {
-
-name = "test"
-
-machine\_type = "e2-medium"
-
-zone = "us-central1-a"
-
-boot\_disk {
-
-initialize\_params {
-
-image = "debian-cloud/debian-9"
-
-}
-
-}
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "boot\_disk": [
-
+    "type": "google\_compute\_instance",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "boot\_disk": [
+                {
+                    "initialize\_params": [
                         {
-
-                            "auto\_delete": true,
-
-                            "disk\_encryption\_key\_raw": null,
-
-                            "initialize\_params": [
-
-                                {
-
-                                    "image": "only-approved-images"
-
-                                }
-
-                            ],
-
-                            "mode": "READ\_WRITE"
-
+                            "image": "only-approved-images"
                         }
-
                     ],
+                 }
+             ],
+```
 
 ComputeInstanceTemplate
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance\_template",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "disk": [
+                {
+                    "source\_image": "Approved Images"
+                }
+            ],
+```
 
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance\_template",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "disk": [
-
-                        {
-
-                            "source\_image": "Approved Images"
-
-                        }
-
-                    ],
-
-**Google Compute Engine**
-
-Kind: ComputeInstance
-
-Kind: ComputeInstanceTemplate
-
-**Prevent External IP Config**
+## Prevent External IP Config
 
 **KCC**
+Kind: ComputeInstance
+Kind: ComputeInstanceTemplate
 
 - Block events for resources of type 'kind: ComputeInstance' and 'kind: ComputeInstanceTemplate' where spec values do not match as described in the table below
 - [ComputeInstance  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstance)
 - [ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstancetemplate#custom_resource_definition_properties)
 
 ComputeInstance
-
+```yaml
 spec:
-
 networkInterface:
   -accessConfig:
     -natIpRef:
         external: string
         name: string
         namespace: string
-
+```
 ComputeInstanceTemplate
-
+```yaml
 networkInterface:
-
-- accessConfig:
-
-- natIpRef:
-
-external: string
+  - accessConfig:
+    - natIpRef:
+      external: string
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -219,116 +150,44 @@ external: string
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
-
-resource "google\_compute\_instance" "default" {
-
-name = "test"
-
-machine\_type = "e2-medium"
-
-zone = "us-central1-a"
-
-network\_interface {
-
-network = "default"
-
-access\_config {
-
-// Ephemeral public IP
-
-}
-
-}
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "before": null,
-
-                "after": {
-
-                    "network\_interface": [
-
-                        {
-
-                            "access\_config": [], #Notice access\_config is empty
-
-                            "alias\_ip\_range": [],
-
-                            "ipv6\_access\_config": [],
-
-                            "network": "default",
-
-                            "nic\_type": null,
-
-                            "queue\_count": null
-
-                        }
-
-                    ],
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "network\_interface": [
+                {
+                    "access\_config": [], #Notice access\_config is empty
+                }
+            ],
+```
 
 ComputeInstanceTemplate
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance\_template",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "network\_interface": [
+                {
+                    "access\_config": [], # Access\_config is empty
+                }
+            ],
+```
 
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance\_template",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "network\_interface": [
-
-                        {
-
-                            "access\_config": [], # Access\_config is empty
-
-                            "alias\_ip\_range": [],
-
-                            "ipv6\_access\_config": [],
-
-                            "network": "default",
-
-                            "network\_ip": null,
-
-                            "nic\_type": null,
-
-                            "queue\_count": null
-
-                        }
-
-                    ],
-
-**Google Compute Engine**
-
-Kind: ComputeInstance
-
-Kind: ComputeInstanceTemplate
-
-**Prevent IP Forwarding Config**
+## Prevent IP Forwarding Config
 
 **KCC**
+Kind: ComputeInstance
+Kind: ComputeInstanceTemplate
 
 - Block events for resources of type 'kind: ComputeInstance' and 'kind: ComputeInstanceTemplate' where spec values do not match as described in below table
 
@@ -336,10 +195,10 @@ Kind: ComputeInstanceTemplate
 - [ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstancetemplate#custom_resource_definition_properties)
 
 ComputeInstance AND ComputeInstanceTemplate
-
+```yaml
 spec:
-
-canIpForward: false
+  canIpForward: false
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -352,68 +211,38 @@ canIpForward: false
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
-
+```json
+"resource\_changes": [
 {
-
-resource "google\_compute\_instance" "default" {
-
-name = "test"
-
-machine\_type = "e2-medium"
-
-zone = "us-central1-a"
-
-can\_ip\_forward = false
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "can\_ip\_forward": false,
+    "type": "google\_compute\_instance",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "can\_ip\_forward": false,
+        }
+```
 
 ComputeInstanceTemplate
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance\_template",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "can\_ip\_forward": false,
+        }
+```
 
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance\_template",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "can\_ip\_forward": false,
-
-**Google Compute Engine**
-
-Kind: ComputeInstance
-
-Kind: ComputeInstanceTemplate
-
-**Prevent Default SA Config**
+## Prevent Default SA Config
 
 **KCC**
+Kind: ComputeInstance
+Kind: ComputeInstanceTemplate
 
 - Block events for resources of type 'kind: ComputeInstance' and 'kind: ComputeInstanceTemplate' where spec values do not match as described in below table
 
@@ -421,28 +250,22 @@ Kind: ComputeInstanceTemplate
 - [ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstancetemplate#custom_resource_definition_properties)
 
 ComputeInstance
-
+```yaml
 spec:
-
-serviceAccount:
-
-serviceAccountRef:
-
-external: gcp\_serviceaccount\_email
-
-name: object\_name
-
-namespace: object\_namespace
+  serviceAccount:
+    serviceAccountRef:
+      external: gcp\_serviceaccount\_email
+      name: object\_name
+      namespace: object\_namespace
+```
 
 ComputeInstanceTemplate
-
+```yaml
 spec:
-
-serviceAccount:
-
-serviceAccountRef:
-
-name: instancetemplate-dep
+  serviceAccount:
+    serviceAccountRef:
+      name: instancetemplate-dep
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -456,106 +279,50 @@ name: instancetemplate-dep
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
-
+```json
+"resource\_changes": [
 {
-
-resource "google\_compute\_instance" "default" {
-
-name = "test"
-
-machine\_type = "e2-medium"
-
-zone = "us-central1-a"
-
-service\_account {
-
-# Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-
-email = google\_service\_account.email
-
-scopes = ["cloud-platform"]
-
-}
-
-}
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "service\_account": [
-
-                        {
-
-                            "email": "google\_service\_account.email", #Non default
-
-                            "scopes": [
-
-                                [https://www.googleapis.com/auth/cloud-platform](https://www.googleapis.com/auth/cloud-platform)
-
-                            ] #separate rule dis-allowing cloud-platform scope
-
-                        }
-
-                    ],
+    "type": "google\_compute\_instance",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "service\_account": [
+                {
+                    "email": "google\_service\_account.email", #Non default
+                    "scopes": [
+                        [https://www.googleapis.com/auth/cloud-platform](https://www.googleapis.com/auth/cloud-platform)
+                    ] #separate rule dis-allowing cloud-platform scope
+                }
+            ],
+```
 
 ComputeInstanceTemplate
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance\_template",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "service\_account": [
+                {
+                    "email": "google\_service\_account.non-default.email",
+                    "scopes": [
+                        "non-cloud-platform"
+                    ]
+                }
+            ],
+```
 
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance\_template",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "service\_account": [
-
-                        {
-
-                            "email": "google\_service\_account.non-default.email",
-
-                            "scopes": [
-
-                                "non-cloud-platform"
-
-                            ]
-
-                        }
-
-                    ],
-
-**Google Compute Engine**
-
-Kind: ComputeInstance
-
-Kind: ComputeInstanceTemplate
-
-**Prevent OSLogin Config**
+## Prevent OSLogin Config
 
 **KCC**
+Kind: ComputeInstance
+Kind: ComputeInstanceTemplate
 
 - Block events for resources of type 'kind: ComputeInstance' and 'kind: ComputeInstanceTemplate' where spec values do not match as described in below table
 
@@ -563,14 +330,12 @@ Kind: ComputeInstanceTemplate
 - [ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstancetemplate#custom_resource_definition_properties)
 
 ComputeInstance and ComputeInstanceTemplate
-
+```yaml
 spec:
-
 metadata:
-
 - key: enable-os-login
-
 value: true
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -584,64 +349,40 @@ value: true
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "metadata": {
-
-                        "enable-oslogin": "true",
-
-                        "foo": "bar"
-
-                    },
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "metadata": {
+                "enable-oslogin": "true",
+            },
+```
 
 ComputeInstanceTemplate
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance\_template",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "metadata": {
+                "enable-oslogin": "true"
+             },
+```
 
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance\_template",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "metadata": {
-
-                        "enable-oslogin": "true"
-
-                    },
-
-**Google Compute Engine**
-
-Kind: ComputeInstance
-
-Kind: ComputeInstanceTemplate
-
-**Enable vTPM, Secure Boot, Integrity Monitoring Config**
+## Enable vTPM, Secure Boot, Integrity Monitoring Config
 
 **KCC**
+Kind: ComputeInstance
+Kind: ComputeInstanceTemplate
 
 - Block events for resources of type 'kind: ComputeInstance' and 'kind: ComputeInstanceTemplate' where spec values do not match as described in below table
 
@@ -649,14 +390,13 @@ Kind: ComputeInstanceTemplate
 - [ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstancetemplate#custom_resource_definition_properties)
 
 ComputeInstance AND ComputeInstanceTemplate
-
-shieldedInstanceConfig:
-
-enableIntegrityMonitoring: true
-
-enableSecureBoot: true
-
-enableVtpm: true
+```yaml
+spec:
+  shieldedInstanceConfig:
+    enableIntegrityMonitoring: true
+    enableSecureBoot: true
+    enableVtpm: true
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -671,98 +411,48 @@ enableVtpm: true
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
-
-resource "google\_compute\_instance" "default" {
-
-name = "test"
-
-machine\_type = "e2-medium"
-
-zone = "us-central1-a"
-
-shielded\_instance\_config {
-
-enable\_secure\_boot = true,
-
-enable\_vtpm = true,
-
-enable\_integrity\_monitoring = true
-
-}
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "shielded\_instance\_config": [
-
-                        {
-
-                            "enable\_integrity\_monitoring": true,
-
-                            "enable\_secure\_boot": true,
-
-                            "enable\_vtpm": true
-
-                        }
-
-                    ],
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "shielded\_instance\_config": [
+                {
+                    "enable\_integrity\_monitoring": true,
+                    "enable\_secure\_boot": true,
+                    "enable\_vtpm": true
+                }
+            ],
+```
 
 ComputeInstanceTemplate
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance\_template",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "shielded\_instance\_config": [
+                {
+                    "enable\_integrity\_monitoring": true,
+                    "enable\_secure\_boot": true,
+                    "enable\_vtpm": true
+                }
+            ],
+```
 
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance\_template",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "shielded\_instance\_config": [
-
-                        {
-
-                            "enable\_integrity\_monitoring": true,
-
-                            "enable\_secure\_boot": true,
-
-                            "enable\_vtpm": true
-
-                        }
-
-                    ],
-
-**Google Compute Engine**
-
-Kind: ComputeInstance
-
-Kind: ComputeInstanceTemplate
-
-**CMEK for Persistent Disks Config**
+## CMEK for Persistent Disks Config
 
 **KCC**
+Kind: ComputeInstance
+Kind: ComputeInstanceTemplate
 
 - Block events for resources of type 'kind: ComputeInstance' and 'kind: ComputeInstanceTemplate' where spec values do not match as described in below table
 
@@ -770,40 +460,30 @@ Kind: ComputeInstanceTemplate
 - [ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstancetemplate#custom_resource_definition_properties)
 
 ComputeInstance
-
-bootDisk:
-
-kmsKeyRef:
-
-external: string
-
-name: string
-
-namespace: string
-
-attachedDisk:
-
-kmsKeyRef:
-
-external: string
-
-name: string
-
-namespace: string
+```yaml
+spec:
+  bootDisk:
+    kmsKeyRef:
+      external: string
+      name: string
+      namespace: string
+  attachedDisk:
+    kmsKeyRef:
+      external: string
+      name: string
+      namespace: string
+```
 
 ComputeInstanceTemplate
-
-disk:
-
-diskEncryptionKey:
-
-kmsKeyRef:
-
-external: string
-
-name: string
-
-namespace: string
+```yaml
+spec:
+  disk:
+    diskEncryptionKey:
+      kmsKeyRef:
+        external: string
+        name: string
+        namespace: string
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -818,132 +498,59 @@ namespace: string
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
-
+```json
+"resource\_changes": [
 {
-
-resource "google\_compute\_instance" "default" {
-
-name = "test"
-
-machine\_type = "e2-medium"
-
-zone = "us-central1-a"
-
-boot\_disk {
-
-initialize\_params {
-
-image = "debian-cloud/debian-9"
-
-}
-
-kms\_key\_self\_link = \_\_\_\_\_\_\_\_\_\_
-
-}
-
-attached\_disk {
-
-kms\_key\_self\_link = \_\_\_\_\_\_\_\_
-
-}
-
-}
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "attached\_disk": [
-
+    "type": "google\_compute\_instance",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "attached\_disk": [
+                {
+                    "kms\_key\_self\_link": "CMEK Key",
+                    "source": "Approved Image"
+                }
+            ],
+            "boot\_disk": [
+                {
+                    "initialize\_params": [
                         {
-
-                            "kms\_key\_self\_link": "CMEK Key",
-
-                            "source": "Approved Image"
-
+                            "image": "debian-cloud/debian-9"
                         }
-
-                    ],
-
-                    "boot\_disk": [
-
-                        {
-
-                            "initialize\_params": [
-
-                                {
-
-                                    "image": "debian-cloud/debian-9"
-
-                                }
-
-                            ],
-
-                            "kms\_key\_self\_link": "CMEK Key",
-
-                        }
-
-                    ],
+                    ], 
+                    "kms\_key\_self\_link": "CMEK Key",
+                }
+            ],
+```
 
 ComputeInstanceTemplate
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance\_template",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "disk": [
-
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance\_template",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "disk": [
+                {
+                    "disk\_encryption\_key": [
                         {
-
-                            "disk\_encryption\_key": [
-
-                                {
-
-                                    "kms\_key\_self\_link": "CMEK Key"
-
-                                }
-
-                            ],
-
+                            "kms\_key\_self\_link": "CMEK Key"
                         }
-
                     ],
+                }
+            ],
+```
 
-**Google Compute Engine**
-
-Kind: ComputeInstance
-
-Kind: ComputeInstanceTemplate
-
-**Block Cloud-Platform Access Scopes Config**
+## Block Cloud-Platform Access Scopes Config
 
 **KCC**
+Kind: ComputeInstance
+Kind: ComputeInstanceTemplate
 
 - Block events for resources of type 'kind: ComputeInstance' and 'kind: ComputeInstanceTemplate' where spec values do not match as described in below table
 
@@ -951,14 +558,12 @@ Kind: ComputeInstanceTemplate
 - [ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstancetemplate#custom_resource_definition_properties)
 
 ComputeInstance AND ComputeInstanceTemplate
-
-spec:
-
-serviceAccount:
-
-scopes:
-
-- string
+```yaml
+spec
+  serviceAccount:
+    scopes:
+    - string
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -972,102 +577,50 @@ scopes:
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
-
+```json
+"resource\_changes": [
 {
-
-resource "google\_compute\_instance" "default" {
-
-name = "test"
-
-machine\_type = "e2-medium"
-
-zone = "us-central1-a"
-
-service\_account {
-
-# Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-
-email = google\_service\_account.default.email
-
-scopes = ["cloud-platform"]
-
-}
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "service\_account": [
-
-                        {
-
-                            "email": "google\_service\_account.email",
-
-                            "scopes": [
-
-                                "cloud-platform"
-
-                            ]
+    "type": "google\_compute\_instance",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "service\_account": [
+                {
+                    "email": "google\_service\_account.email",
+                    "scopes": [
+                        "cloud-platform"
+                    ]
+```
 
 ComputeInstanceTemplate
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance\_template",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "service\_account": [
+                {
+                    "email": "google\_service\_account.non-default.email",
+                    "scopes": [
+                        "cloud-platform"
+                    ]
+                }
+            ],
+```
 
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance\_template",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "service\_account": [
-
-                        {
-
-                            "email": "google\_service\_account.non-default.email",
-
-                            "scopes": [
-
-                                "cloud-platform"
-
-                            ]
-
-                        }
-
-                    ],
-
-**Google Compute Engine**
-
-Kind: ComputeInstance
-
-Kind: ComputeInstanceTemplate
-
-**Disallow use of Local SSD Config**
+## Disallow use of Local SSD Config
 
 "Scratch Disks" – aka Local SSD's – do not support KMS encryption keys.
 
 **KCC**
+Kind: ComputeInstance
+Kind: ComputeInstanceTemplate
 
 - Block events for resources of type 'kind: ComputeInstance' and 'kind: ComputeInstanceTemplate' where spec values do not match as described in below table
 
@@ -1075,20 +628,18 @@ Kind: ComputeInstanceTemplate
 - [ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstancetemplate#custom_resource_definition_properties)
 
 ComputeInstance
-
+```yaml
 spec:
-
-scratchDisk:
-
-- interface:
+  scratchDisk:
+  - interface:
+```
 
 ComputeInstanceTemplate
-
+```yaml
 spec:
-
-disk:
-
-diskType: local-ssd
+  disk:
+    diskType: local-ssd
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -1104,86 +655,44 @@ diskType: local-ssd
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
-
+``json
+"resource\_changes": [
 {
-
-resource "google\_compute\_instance" "default" {
-
-name = "test"
-
-machine\_type = "e2-medium"
-
-zone = "us-central1-a"
-
-scratch\_disk {
-
-interface = "SCSI"
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "scratch\_disk": [
-
-                        {
-
-                            "interface": "SCSI"
-
-                        }
-
-                    ],
+    "type": "google\_compute\_instance",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "scratch\_disk": [
+                {
+                    "interface": "SCSI"
+                }
+            ],
+```
 
 ComputeInstanceTemplate
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance\_template",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "disk": [
+                {
+                    "interface": "SCSI"
+                }
+            ],
+```
 
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance\_template",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "disk": [
-
-                        {
-
-                            "interface": "SCSI"
-
-                        }
-
-                    ],
-
-**Google Compute Engine**
-
-Kind: ComputeInstance
-
-Kind: ComputeInstanceTemplate
-
-**Require 'block-project-ssh-keys' Config**
+## Require 'block-project-ssh-keys' Config
 
 **KCC**
+Kind: ComputeInstance
+Kind: ComputeInstanceTemplate
 
 - Block events for resources of type 'kind: ComputeInstance' and 'kind: ComputeInstanceTemplate' where spec values do not match as described in below table
 
@@ -1191,22 +700,20 @@ Kind: ComputeInstanceTemplate
 - [ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstancetemplate#custom_resource_definition_properties)
 
 ComputeInstance
-
+```yaml
 spec:
-
-metadata:
-
-- key: block-project-ssh-keys
-
-value: true
+  metadata:
+  - key: block-project-ssh-keys
+    value: true
+```
 
 ComputeInstanceTemplate
-
-metadata:
-
-- key: block-project-ssh-keys
-
-value: true
+```yaml
+spec:
+  metadata:
+  - key: block-project-ssh-keys
+    value: true
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -1221,80 +728,40 @@ value: true
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
-
+```json
+"resource\_changes": [
 {
-
-resource "google\_compute\_instance" "default" {
-
-name = "test"
-
-machine\_type = "e2-medium"
-
-zone = "us-central1-a"
-
-metadata {
-
-block\_project\_ssh\_keys = "true"
-
-}
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "metadata": {
-
-                        "block\_project\_ssh\_keys": "true",
-
-                    },
+    "type": "google\_compute\_instance",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "metadata": {
+                "block\_project\_ssh\_keys": "true",
+            },
+```
 
 ComputeInstanceTemplate
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_instance\_template",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "metadata": {
+                "block\_project\_ssh\_keys": "true"
+            },
+```
 
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance\_template",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "metadata": {
-
-                        "block\_project\_ssh\_keys": "true"
-
-                    },
-
-**Google Compute Engine**
-
-Kind: ComputeInstance
-
-Kind: ComputeInstanceTemplate
-
-**Block Virtual Displays Config**
+## Block Virtual Displays Config
 
 **KCC**
+Kind: ComputeInstance
+Kind: ComputeInstanceTemplate
 
 - Block events for resources of type 'kind: ComputeInstance' and 'kind: ComputeInstanceTemplate' where spec values do not match as described in below table
 
@@ -1302,16 +769,16 @@ Kind: ComputeInstanceTemplate
 - [ComputeInstanceTemplate  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computeinstancetemplate#custom_resource_definition_properties)
 
 ComputeInstance
-
-Spec:
-
-enableDisplay: false
+```yaml
+spec:
+  enableDisplay: false
+```
 
 ComputeInstanceTemplate
-
-sepc:
-
-enableDisplay: false
+```yaml
+spec:
+  enableDisplay: false
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -1327,67 +794,36 @@ enableDisplay: false
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeInstance
-
+```json
+"resource\_changes": [
 {
+    "type": "google\_compute\_instance",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "enable\_display": false,
+        },
+```
 
-resource "google\_compute\_instance" "default" {
-
-name = "test"
-
-machine\_type = "e2-medium"
-
-zone = "us-central1-a"
-
-enable\_display = false
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_instance",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "enable\_display": false,
-
-                    },
-
-ComputeInstanceTemplate
-
-**Google Compute Engine**
-
-Kind: ComputeDisk
-
-**CMEK for Persistent Disks Config**
+## CMEK for Persistent Disks Config
 
 **KCC**
+Kind: ComputeDisk
 
 - Block events for resources of type 'kind: ComputeDisk' where spec values do not match as described in below table
 - [ComputeDisk  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computedisk)
 
 ComputeDisk
-
+```yaml
 spec:
-
-diskEncryptionKey:
-
-kmsKeyRef:
-
-external: string
-
-name: string
-
-namespace: string
+  diskEncryptionKey:
+    kmsKeyRef:
+      external: string
+      name: string
+      namespace: string
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -1400,85 +836,40 @@ namespace: string
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeDisk
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_disk",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "disk\_encryption\_key": [
+                {
+                    "kms\_key\_self\_link": "CMEK Key",
+                    "kms\_key\_service\_account": null,
+                    "raw\_key": null
+                }
+            ],
+```
 
-resource "google\_compute\_disk" "default" {
-
-name = "test-disk"
-
-type = "pd-ssd"
-
-zone = "us-central1-a"
-
-image = "debian-9-stretch-v20200805"
-
-labels = {
-
-environment = "dev"
-
-}
-
-physical\_block\_size\_bytes = 4096
-
-disk\_ecryption\_key {
-
-kms\_key\_self\_link = ""
-
-}
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_disk",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "disk\_encryption\_key": [
-
-                        {
-
-                            "kms\_key\_self\_link": "CMEK Key",
-
-                            "kms\_key\_service\_account": null,
-
-                            "raw\_key": null
-
-                        }
-
-                    ],
-
-**Google Compute Engine**
-
-Kind: ComputeDisk
-
-**Approved Imaged for Persistent Disks Config**
+## Approved Imaged for Persistent Disks Config
 
 **KCC**
+Kind: ComputeDisk
 
 - Block events for resources of type 'kind: ComputeDisk' where spec values do not match as described in below table
 - [ComputeDisk  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computedisk)
 
 ComputeDisk
-
+```yaml
 spec:
-
-imageRef:
-
-external: string
-
-name: string
-
-namespace: string
+  imageRef:
+    external: string
+    name: string
+    namespace: string
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -1491,63 +882,32 @@ namespace: string
 - Ignore the allow list if the 'project' is in the exemption list -\> i.e., do not enforce the rule if the 'project' is in an exemption list.
 
 ComputeDisk
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_disk",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "image": "Approved Images",
+        },
+```
 
-resource "google\_compute\_disk" "default" {
-
-name = "test-disk"
-
-type = "pd-ssd"
-
-zone = "us-central1-a"
-
-image = "approved-image"
-
-labels = {
-
-environment = "dev"
-
-}
-
-physical\_block\_size\_bytes = 4096
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_disk",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "image": "Approved Images",
-
-                    },
-
-**Google Compute Engine**
-
-Kind: ComputeDisk
-
-**Disallow use of Local SSD Config**
+## Disallow use of Local SSD Config
 
 **KCC**
+Kind: ComputeDisk
 
 - Block events for resources of type 'kind: ComputeDisk' where spec values do not match as described in below table
 - [ComputeDisk  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/compute/computedisk)
 
 ComputeDisk
-
+```yaml
 spec:
-
-type: pd-ssd
+  type: pd-ssd
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
@@ -1559,43 +919,14 @@ type: pd-ssd
 - Do nothing for 'delete' events
 
 ComputeDisk
-
-resource "google\_compute\_disk" "default" {
-
-name = "test-disk"
-
-type = "local-ssd"
-
-zone = "us-central1-a"
-
-image = "debian-9-stretch-v20200805"
-
-labels = {
-
-environment = "dev"
-
-}
-
-physical\_block\_size\_bytes = 4096
-
-}
-
-    "resource\_changes": [
-
-        {
-
-            "type": "google\_compute\_disk",
-
-            "change": {
-
-                "actions": [
-
-                    "create"
-
-                ],
-
-                "after": {
-
-                    "type": "local-ssd", #block local-ssd
-
-                },
+```json
+"resource\_changes": [
+{
+    "type": "google\_compute\_disk",
+    "change": {
+        "actions": [
+            "create"
+        ],
+        "after": {
+            "type": "local-ssd", #block local-ssd
+        },
