@@ -26,26 +26,26 @@ spec:
 
 **Terraform:**
 
-- Allow 'create' or 'no-op' or 'update' events for resources of type "google\_pubsub\_topic" and type "google\_pubsub\_lite\_topic" where field 'resource -\> default\_encryption\_configuration' equals a valid CMEK
+- Allow 'create' or 'no-op' or 'update' events for resources of type "google_pubsub_topic" and type "google_pubsub_lite_topic" where field 'resource -\> default_encryption_configuration' equals a valid CMEK
 - Do nothing for 'delete' events
 
-google\_pubsub\_topic
+google_pubsub_topic
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_kms\_crypto\_key",
+    "type": "google_kms_crypto_key",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
             "name": "example-key",
-            "purpose": "ENCRYPT\_DECRYPT",
+            "purpose": "ENCRYPT_DECRYPT",
         },
     }
 },
 {
-    "type": "google\_kms\_key\_ring",
+    "type": "google_kms_key_ring",
     "change": {
         "actions": [
             "create"
@@ -56,21 +56,21 @@ google\_pubsub\_topic
     }
 },
 {
-    "type": "google\_pubsub\_topic",
+    "type": "google_pubsub_topic",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
         },
-        "after\_unknown": {
-            "kms\_key\_name": true,
+        "after_unknown": {
+            "kms_key_name": true,
         },
 ```
 
-google\_pubsub\_lite\_topic
+google_pubsub_lite_topic
 ```json
-non-existent kms\_key\_ref argument
+non-existent kms_key_ref argument
 ```
 
 ## Allow specific regions to host PubSub message persistence
@@ -94,22 +94,22 @@ spec:
 
 **Terraform:**
 
-- Allow 'create' or 'no-op' or 'update' events for resources of type "google\_pubsub\_topic" and type "google\_pubsub\_lite\_topic" where field 'resource -\> default\_encryption\_configuration' equals a valid CMEK
+- Allow 'create' or 'no-op' or 'update' events for resources of type "google_pubsub_topic" and type "google_pubsub_lite_topic" where field 'resource -\> default_encryption_configuration' equals a valid CMEK
 - Do nothing for 'delete' events
 
-google\_pubsub\_topic
+google_pubsub_topic
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_pubsub\_topic",
+    "type": "google_pubsub_topic",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "message\_storage\_policy": [
+            "message_storage_policy": [
                 {
-                    "allowed\_persistence\_regions": [
+                    "allowed_persistence_regions": [
                         "us-central1"
                     ]
                 }
@@ -117,11 +117,11 @@ google\_pubsub\_topic
         },
 ```
 
-google\_pubsub\_lite\_topic
+google_pubsub_lite_topic
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_pubsub\_lite\_reservation",
+    "type": "google_pubsub_lite_reservation",
     "change": {
         "actions": [
             "create"
