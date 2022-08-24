@@ -41,13 +41,13 @@ spec:
 
 **Terraform:**
 
-- Allow 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_subnetwork" where field 'resource -\> region' equals an allowed region
+- Allow 'create' or 'no-op' or 'update' events for resources of type "google_compute_subnetwork" where field 'resource -\> region' equals an allowed region
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_subnetwork",
+    "type": "google_compute_subnetwork",
     "change": {
         "actions": [
             "create"
@@ -68,30 +68,30 @@ Kind: ComputeSubnetwork
 ```yaml
 spec:
   logConfig:
-    metadata: INCLUDE\_ALL\_METADATA
+    metadata: INCLUDE_ALL_METADATA
 ```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
-| compute.cnrm.cloud.google.com | ComputeFirewall | spec.logConfig.metadata | equals | INCLUDE\_ALL\_METADATA |
+| compute.cnrm.cloud.google.com | ComputeFirewall | spec.logConfig.metadata | equals | INCLUDE_ALL_METADATA |
 
 **Terraform:**
 
-- Allow 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_subnetwork" where field 'resource -\> log\_config -\> metadata' equals "INCLUDE\_ALL\_METADATA"
+- Allow 'create' or 'no-op' or 'update' events for resources of type "google_compute_subnetwork" where field 'resource -\> log_config -\> metadata' equals "INCLUDE_ALL_METADATA"
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_subnetwork",
+    "type": "google_compute_subnetwork",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "log\_config": [
+            "log_config": [
                 {
-                    "metadata": "INCLUDE\_ALL\_METADATA",
+                    "metadata": "INCLUDE_ALL_METADATA",
                 }
             ],
         },
@@ -116,19 +116,19 @@ spec:
 
 **Terraform:**
 
-- Allow 'create' or 'no-op' or 'update' events for resources of type "google\_compute\_subnetwork" where field 'resource -\>private\_ip\_google\_access' equals true
+- Allow 'create' or 'no-op' or 'update' events for resources of type "google_compute_subnetwork" where field 'resource -\>private_ip_google_access' equals true
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_compute\_subnetwork",
+    "type": "google_compute_subnetwork",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "private\_ip\_google\_access": true,
+            "private_ip_google_access": true,
         },
 ```
 
