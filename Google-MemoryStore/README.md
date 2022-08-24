@@ -23,22 +23,22 @@ spec:
 
 **Terraform:**
 
-- Allow 'create' or 'no-op' or 'update' events for resources of type "google\_redis\_instance" where field 'resource -\> customer\_managed\_key' equals a valid CMEK key
+- Allow 'create' or 'no-op' or 'update' events for resources of type "google_redis_instance" where field 'resource -\> customer_managed_key' equals a valid CMEK key
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_kms\_crypto\_key",
+    "type": "google_kms_crypto_key",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "customer\_managed\_key": {
+            "customer_managed_key": {
                 "references": [
-                    "google\_kms\_crypto\_key.redis\_key.id",
-                    "google\_kms\_crypto\_key.redis\_key"
+                    "google_kms_crypto_key.redis_key.id",
+                    "google_kms_crypto_key.redis_key"
                 ]
 ```
 
@@ -63,20 +63,20 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_redis\_instance" where field 'resource -\> customer\_managed\_key' equals a valid CMEK key
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_redis_instance" where field 'resource -\> customer_managed_key' equals a valid CMEK key
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_redis\_instance",
+    "type": "google_redis_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "alternative\_location\_id": "Approved Alt Location id",
-            "location\_id": "Approved Location id",
+            "alternative_location_id": "Approved Alt Location id",
+            "location_id": "Approved Location id",
             "region": "Approved Region",
         },
 ```
@@ -97,12 +97,12 @@ Kind: RedisInstance
 
 ```yaml
 spec:
-  connectMode: 'PRIVATE\_SERVICE\_ACCESS'
+  connectMode: 'PRIVATE_SERVICE_ACCESS'
 ```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
-| redis.cnrm.cloud.google.com | RedisInstance | spec.connectMode | equals | PRIVATE\_SERVICE\_ACCESS |
+| redis.cnrm.cloud.google.com | RedisInstance | spec.connectMode | equals | PRIVATE_SERVICE_ACCESS |
 
 **Terraform:**
 
@@ -111,20 +111,20 @@ spec:
   - Compute.addresses.create
   - Compute.addresses.list
   - Servicenetworking.services.addPeering
-- Block 'create' events for resources of type "google\_redis\_instance" where field 'resource -\> connect\_mode' is not equal to "PRIVATE\_SERVICE\_ACCESS"
+- Block 'create' events for resources of type "google_redis_instance" where field 'resource -\> connect_mode' is not equal to "PRIVATE_SERVICE_ACCESS"
 
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_redis\_instance",
+    "type": "google_redis_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "connect\_mode": "PRIVATE\_SERVICE\_ACCESS",
+            "connect_mode": "PRIVATE_SERVICE_ACCESS",
         },
 ```
 
@@ -147,19 +147,19 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_redis\_instance" where field 'resource -\> transit\_encryption\_mode' does not equal "SERVER\_AUTHENTICATION"
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_redis_instance" where field 'resource -\> transit_encryption_mode' does not equal "SERVER_AUTHENTICATION"
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_redis\_instance",
+    "type": "google_redis_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "transit\_encryption\_mode": "SERVER\_AUTHENTICATION"
+            "transit_encryption_mode": "SERVER_AUTHENTICATION"
         },
 ```
 
@@ -184,22 +184,22 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_redis\_instance" where field 'resource -\> auth\_enabled' does not equal "true"
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_redis_instance" where field 'resource -\> auth_enabled' does not equal "true"
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_redis\_instance",
+    "type": "google_redis_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "auth\_enabled": true,
+            "auth_enabled": true,
         },
-        "after\_unknown": {
-            "auth\_string": true,
+        "after_unknown": {
+            "auth_string": true,
         },
 ```
 
@@ -222,18 +222,18 @@ spec:
 
 **Terraform:**
 
-- Block 'create' or 'no-op' or 'update' events for resources of type "google\_redis\_instance" where field 'resource -\> redis\_version' is lower than the lowest approved version of redis
+- Block 'create' or 'no-op' or 'update' events for resources of type "google_redis_instance" where field 'resource -\> redis_version' is lower than the lowest approved version of redis
 - Do nothing for 'delete' events
 
 ```json
-"resource\_changes": [
+"resource_changes": [
 {
-    "type": "google\_redis\_instance",
+    "type": "google_redis_instance",
     "change": {
         "actions": [
             "create"
         ],
         "after": {
-            "redis\_version": "REDIS\_6\_X",
+            "redis_version": "REDIS_6_X",
         },
 ```
