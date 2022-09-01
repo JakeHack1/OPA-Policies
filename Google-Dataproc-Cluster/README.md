@@ -4,11 +4,9 @@ Wednesday, August 31, 2022
 
 5:04 PM
 
-**Google Dataproc Cluster**
-
 Kind: IAMPolicy
 
-**Block Assigning Dataproc Role roles/Dataproc.worker to users or groups (Service Accounts exempted)**
+## Block Assigning Dataproc Role roles/Dataproc.worker to users or groups (Service Accounts exempted)
 
 **KCC**
 
