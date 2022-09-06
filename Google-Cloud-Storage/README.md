@@ -405,3 +405,60 @@ Google_storage_bucket_iam_policy_binding
             "role": "roles/storage.owner"
         },
 ```
+
+## UT and PROD GCS Buckets used as LOG SYNC Buckets Must be configured with Bucket Lock Enabled for 13 Months
+
+**KCC**
+Kind: StorageBucket
+
+- Block events for resources of type 'kind: StorageBucket' where spec values do not match as described in below table
+- [StorageBucketAccessControl  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/storage/storagebucketaccesscontrol)
+
+```yaml
+spec:
+  retentionPolicy:
+    isLocked: Boolean
+    retentionPeriod: integer
+
+| **API** | **Kind** | **Key** | **Conditional** | **Value** |
+| --- | --- | --- | --- | --- |
+| storage.cnrm.cloud.google.com | StorageBucket | spec.retentionPolicy.isLocked | Equals | true |
+| --- | --- | --- | --- | --- |
+| storage.cnrm.cloud.google.com | StorageBucket | spec.retentionPolicy.retentionPeriod | Equals | 34,164,037 |
+
+**Terraform:**
+
+- Allow 'create' or 'no-op' or 'update' events for resources of type "google_storage_bucket" where field 'resource -> retention_policy -> is_locked' equals true AND where field 'resource -> retention_policy -> retention_period' equals 13 months (~34164037 seconds)
+- Do nothing for 'delete' events
+
+```json
+    "resource_changes": [
+
+        {
+
+            "type": "google_storage_bucket",
+
+            "change": {
+
+                "actions": [
+
+                    "create"
+
+                ],
+
+                "after": {
+
+                    "retention_policy": [
+
+                        {
+
+                            "is_locked": true,
+
+                            "retention_period": 34164037
+
+                        }
+
+                    ],
+
+                },
+```
