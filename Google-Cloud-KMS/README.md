@@ -8,16 +8,16 @@ Tuesday, September 9, 2022
 
 **Terraform:**
 
-- Allow 'create' or 'no-op' or 'update' events for resources of type "google \_kms\_crypto\_key\_iam\_policy" or "google\_kms\_crypto\_key\_iam\_binding" and "google\_kms\_crypto\_key\_iam\_member" and "google\_kms \_key\_ring\_iam\_policy" and "google\_kms \_key\_ring\_iam\_binding" and "google\_kms \_key\_ring\_iam\_member" where field 'resource -\> members' is not equal to 'allUsers' or 'allAuthenticatedUsers'
+- Allow 'create' or 'no-op' or 'update' events for resources of type "google _kms_crypto_key_iam_policy" or "google_kms_crypto_key_iam_binding" and "google_kms_crypto_key_iam_member" and "google_kms _key_ring_iam_policy" and "google_kms _key_ring_iam_binding" and "google_kms _key_ring_iam_member" where field 'resource -\> members' is not equal to 'allUsers' or 'allAuthenticatedUsers'
 - Do nothing for 'delete' events
 
-google\_kms\_crypto\_key\_iam\_policy
+google_kms_crypto_key_iam_policy
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_crypto\_key\_iam\_policy",
+            "type": "google_kms_crypto_key_iam_policy",
 
             "change": {
 
@@ -29,18 +29,18 @@ google\_kms\_crypto\_key\_iam\_policy
 
                 "after": {
 
-                    "policy\_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/cloudkms.cryptoKeyEncrypter\"}]}"
+                    "policy_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/cloudkms.cryptoKeyEncrypter\"}]}"
 
                 },
 ```
 
-google\_kms\_crypto\_key\_iam\_binding
+google_kms_crypto_key_iam_binding
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_crypto\_key\_iam\_binding",
+            "type": "google_kms_crypto_key_iam_binding",
 
             "change": {
 
@@ -63,13 +63,13 @@ google\_kms\_crypto\_key\_iam\_binding
                 },
 ```
 
-google\_kms\_crypto\_key\_iam\_member
+google_kms_crypto_key_iam_member
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_crypto\_key\_iam\_member",
+            "type": "google_kms_crypto_key_iam_member",
 
             "change": {
 
@@ -86,13 +86,13 @@ google\_kms\_crypto\_key\_iam\_member
                 },
 ```
 
-google\_kms \_key\_ring\_iam\_policy
+google_kms _key_ring_iam_policy
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_key\_ring\_iam\_policy",
+            "type": "google_kms_key_ring_iam_policy",
 
             "change": {
 
@@ -104,18 +104,18 @@ google\_kms \_key\_ring\_iam\_policy
 
                 "after": {
 
-                    "policy\_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/editor\"}]}"
+                    "policy_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/editor\"}]}"
 
                 },
 ```
 
-google\_kms \_key\_ring\_iam\_binding
+google_kms _key_ring_iam_binding
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_key\_ring\_iam\_binding",
+            "type": "google_kms_key_ring_iam_binding",
 
             "change": {
 
@@ -138,13 +138,13 @@ google\_kms \_key\_ring\_iam\_binding
                 },
 ```
 
-google\_kms \_key\_ring\_iam\_member
+google_kms _key_ring_iam_member
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_key\_ring\_iam\_member",
+            "type": "google_kms_key_ring_iam_member",
 
             "change": {
 
@@ -188,16 +188,16 @@ N/A
 
 **Terraform:**
 
-- Allow 'create' or 'no-op' or 'update' events for resources of type "google\_kms\_crypto\_key" or "google\_kms\_key\_ring" where field 'resource -\> rotation\_period' is equal to 90 days
+- Allow 'create' or 'no-op' or 'update' events for resources of type "google_kms_crypto_key" or "google_kms_key_ring" where field 'resource -\> rotation_period' is equal to 90 days
 - Do nothing for 'delete' events
 
-google\_kms\_crypto\_key
+google_kms_crypto_key
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_crypto\_key",
+            "type": "google_kms_crypto_key",
 
             "change": {
 
@@ -209,12 +209,12 @@ google\_kms\_crypto\_key
 
                 "after": {
 
-                    "rotation\_period": "7776000s",
+                    "rotation_period": "7776000s",
 
                 },
 ```
 
-google\_kms\_crypto\_key
+google_kms_crypto_key
 ```json
 N/A
 ```
@@ -232,17 +232,17 @@ Kind: KMSCryptoKey, KMSKeyRing
 
 **Terraform:**
 
-- Allow 'create' or 'update' events for resources of type "google\_kms\_crypto\_key\_iam\_policy" or "google\_kms\_crypto\_key\_iam\_binding" and "google\_kms\_crypto\_key\_iam\_member" and "google\_kms \_key\_ring\_iam\_policy" and "google\_kms \_key\_ring\_iam\_binding" and "google\_kms \_key\_ring\_iam\_member" where permissions .restore, .destroy, and .update are only given to authorized service accounts and AD groups
+- Allow 'create' or 'update' events for resources of type "google_kms_crypto_key_iam_policy" or "google_kms_crypto_key_iam_binding" and "google_kms_crypto_key_iam_member" and "google_kms _key_ring_iam_policy" and "google_kms _key_ring_iam_binding" and "google_kms _key_ring_iam_member" where permissions .restore, .destroy, and .update are only given to authorized service accounts and AD groups
 
 - Do nothing for 'delete' or 'no-op' events
 
-google\_kms\_crypto\_key\_iam\_policy
+google_kms_crypto_key_iam_policy
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_crypto\_key\_iam\_policy",
+            "type": "google_kms_crypto_key_iam_policy",
 
             "change": {
 
@@ -254,18 +254,18 @@ google\_kms\_crypto\_key\_iam\_policy
 
                 "after": {
 
-                    "policy\_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
+                    "policy_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
 
                 },
 ```
 
-google\_kms\_crypto\_key\_iam\_binding
+google_kms_crypto_key_iam_binding
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_crypto\_key\_iam\_binding",
+            "type": "google_kms_crypto_key_iam_binding",
 
             "change": {
 
@@ -282,13 +282,13 @@ google\_kms\_crypto\_key\_iam\_binding
                 },
 ```
 
-google\_kms\_crypto\_key\_iam\_member
+google_kms_crypto_key_iam_member
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_crypto\_key\_iam\_member",
+            "type": "google_kms_crypto_key_iam_member",
 
             "change": {
 
@@ -305,13 +305,13 @@ google\_kms\_crypto\_key\_iam\_member
                 },
 ```
 
-google\_kms \_key\_ring\_iam\_policy
+google_kms _key_ring_iam_policy
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_key\_ring\_iam\_policy",
+            "type": "google_kms_key_ring_iam_policy",
 
             "change": {
 
@@ -323,18 +323,18 @@ google\_kms \_key\_ring\_iam\_policy
 
                 "after": {
 
-                    "policy\_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
+                    "policy_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
 
                 },
 ```
 
-google\_kms \_key\_ring\_iam\_binding
+google_kms _key_ring_iam_binding
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_key\_ring\_iam\_binding",
+            "type": "google_kms_key_ring_iam_binding",
 
             "change": {
 
@@ -351,13 +351,13 @@ google\_kms \_key\_ring\_iam\_binding
                 },
 ```
 
-google\_kms \_key\_ring\_iam\_member
+google_kms _key_ring_iam_member
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_key\_ring\_iam\_member",
+            "type": "google_kms_key_ring_iam_member",
 
             "change": {
 
@@ -384,17 +384,17 @@ google\_kms \_key\_ring\_iam\_member
 
 **Terraform:**
 
-- Allow 'create' or 'update' events for resources of type "google\_kms\_crypto\_key\_iam\_policy" or "google\_kms\_crypto\_key\_iam\_binding" and "google\_kms\_crypto\_key\_iam\_member" and "google\_kms \_key\_ring\_iam\_policy" and "google\_kms \_key\_ring\_iam\_binding" and "google\_kms \_key\_ring\_iam\_member" where field for "resource -\> kms\_key\_name" is equal to a PROD KMS Key and the field "resource -\> member" is an approved service account/group
+- Allow 'create' or 'update' events for resources of type "google_kms_crypto_key_iam_policy" or "google_kms_crypto_key_iam_binding" and "google_kms_crypto_key_iam_member" and "google_kms _key_ring_iam_policy" and "google_kms _key_ring_iam_binding" and "google_kms _key_ring_iam_member" where field for "resource -\> kms_key_name" is equal to a PROD KMS Key and the field "resource -\> member" is an approved service account/group
 
 - Do nothing for 'delete' or 'no-op' events
 
-google\_kms\_crypto\_key\_iam\_policy
+google_kms_crypto_key_iam_policy
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_crypto\_key\_iam\_policy",
+            "type": "google_kms_crypto_key_iam_policy",
 
             "change": {
 
@@ -408,18 +408,18 @@ google\_kms\_crypto\_key\_iam\_policy
 
                     "name": "PROD KMS Key",
 
-                    "policy\_data": "{\"bindings\":[{\"members\":[\"approvedADGroup@email.com\",\"approvedServiceAccount@email.com\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
+                    "policy_data": "{\"bindings\":[{\"members\":[\"approvedADGroup@email.com\",\"approvedServiceAccount@email.com\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
 
                 },
 ```
 
-google\_kms\_crypto\_key\_iam\_binding
+google_kms_crypto_key_iam_binding
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_crypto\_key\_iam\_binding",
+            "type": "google_kms_crypto_key_iam_binding",
 
             "change": {
 
@@ -431,7 +431,7 @@ google\_kms\_crypto\_key\_iam\_binding
 
                 "after": {
 
-                    "crypto\_key\_id": "PROD KMS Key",
+                    "crypto_key_id": "PROD KMS Key",
 
                     "members": [
 
@@ -444,13 +444,13 @@ google\_kms\_crypto\_key\_iam\_binding
                 },
 ```
 
-google\_kms\_crypto\_key\_iam\_member
+google_kms_crypto_key_iam_member
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_crypto\_key\_iam\_member",
+            "type": "google_kms_crypto_key_iam_member",
 
             "change": {
 
@@ -462,20 +462,20 @@ google\_kms\_crypto\_key\_iam\_member
 
                 "after": {
 
-                    "crypto\_key\_id": "PROD KMS Key",
+                    "crypto_key_id": "PROD KMS Key",
 
                     "member": "approvedAccounts/Groups",
 
                 },
 ```
 
-google\_kms \_key\_ring\_iam\_policy
+google_kms _key_ring_iam_policy
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_key\_ring\_iam\_policy",
+            "type": "google_kms_key_ring_iam_policy",
 
             "change": {
 
@@ -489,18 +489,18 @@ google\_kms \_key\_ring\_iam\_policy
 
                     "name": "PROD KMS Key",
 
-                    "policy\_data": "{\"bindings\":[{\"members\":[\"approvedADGroups\",\"approvedServiceAccounts\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
+                    "policy_data": "{\"bindings\":[{\"members\":[\"approvedADGroups\",\"approvedServiceAccounts\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
 
                 },
 ```
 
-google\_kms \_key\_ring\_iam\_binding
+google_kms _key_ring_iam_binding
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_key\_ring\_iam\_binding",
+            "type": "google_kms_key_ring_iam_binding",
 
             "change": {
 
@@ -512,7 +512,7 @@ google\_kms \_key\_ring\_iam\_binding
 
                 "after": {
 
-                    "key\_ring\_id": "PROD KMS Key",
+                    "key_ring_id": "PROD KMS Key",
 
                     "members": [
 
@@ -525,13 +525,13 @@ google\_kms \_key\_ring\_iam\_binding
                 },
 ```
 
-google\_kms \_key\_ring\_iam\_member
+google_kms _key_ring_iam_member
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_kms\_key\_ring\_iam\_member",
+            "type": "google_kms_key_ring_iam_member",
 
             "change": {
 
@@ -543,7 +543,7 @@ google\_kms \_key\_ring\_iam\_member
 
                 "after": {
 
-                    "key\_ring\_id": "PROD KMS Key",
+                    "key_ring_id": "PROD KMS Key",
 
                     "member": "approvedServiceAccounts/ADGroups",
 
@@ -554,16 +554,16 @@ google\_kms \_key\_ring\_iam\_member
 
 **Terraform:**
 
-- Allow 'create' or 'update' events for resources of type "google\_iam\_deny\_policy" where field "resource -\> rules -\> deny\_rule -\> denied\_permissions" is equal to 'constraints/gcp.restrictNonCmekServices'
+- Allow 'create' or 'update' events for resources of type "google_iam_deny_policy" where field "resource -\> rules -\> deny_rule -\> denied_permissions" is equal to 'constraints/gcp.restrictNonCmekServices'
 
 - Do nothing for 'delete' or 'no-op' events
 
 ```json
-    "resource\_changes": [
+    "resource_changes": [
 
         {
 
-            "type": "google\_iam\_deny\_policy",
+            "type": "google_iam_deny_policy",
 
             "change": {
 
@@ -579,11 +579,11 @@ google\_kms \_key\_ring\_iam\_member
 
                         {
 
-                            "deny\_rule": [
+                            "deny_rule": [
 
                                 {
 
-                                    "denied\_permissions": [
+                                    "denied_permissions": [
 
                                         "constraints/gcp.restrictNonCmekServices"
 
