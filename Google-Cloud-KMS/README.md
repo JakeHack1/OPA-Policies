@@ -4,9 +4,7 @@ Tuesday, September 9, 2022
 
 10:48 AM
 
-**Google Cloud KMS**
-
-**KMS Keys/Keyrings Permissions Must not Include "allUsers" or "allAuthenticatedUsers"**
+## KMS Keys/Keyrings Permissions Must not Include "allUsers" or "allAuthenticatedUsers"
 
 **Terraform:**
 
@@ -14,7 +12,7 @@ Tuesday, September 9, 2022
 - Do nothing for 'delete' events
 
 google\_kms\_crypto\_key\_iam\_policy
-
+```json
     "resource\_changes": [
 
         {
@@ -34,9 +32,10 @@ google\_kms\_crypto\_key\_iam\_policy
                     "policy\_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/cloudkms.cryptoKeyEncrypter\"}]}"
 
                 },
+```
 
 google\_kms\_crypto\_key\_iam\_binding
-
+```json
     "resource\_changes": [
 
         {
@@ -62,9 +61,10 @@ google\_kms\_crypto\_key\_iam\_binding
                     ],
 
                 },
+```
 
 google\_kms\_crypto\_key\_iam\_member
-
+```json
     "resource\_changes": [
 
         {
@@ -84,9 +84,10 @@ google\_kms\_crypto\_key\_iam\_member
                     "member": "allUsers", (or "allAuthenticatedUsers")
 
                 },
+```
 
 google\_kms \_key\_ring\_iam\_policy
-
+```json
     "resource\_changes": [
 
         {
@@ -106,9 +107,10 @@ google\_kms \_key\_ring\_iam\_policy
                     "policy\_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/editor\"}]}"
 
                 },
+```
 
 google\_kms \_key\_ring\_iam\_binding
-
+```json
     "resource\_changes": [
 
         {
@@ -134,9 +136,10 @@ google\_kms \_key\_ring\_iam\_binding
                     ],
 
                 },
+```
 
 google\_kms \_key\_ring\_iam\_member
-
+```json
     "resource\_changes": [
 
         {
@@ -156,8 +159,9 @@ google\_kms \_key\_ring\_iam\_member
                     "member": "allUsers", (or allAuthenticatedUsers)
 
                 },
+```
 
-**Automatic Rotation of GCP KMS Symmetric Keys Must be Set to 90 Day Rotation Period**
+## Automatic Rotation of GCP KMS Symmetric Keys Must be Set to 90 Day Rotation Period
 
 **KCC**
 
@@ -168,19 +172,19 @@ Kind: KMSCryptoKey, KMSKeyRing
 - [KMSKeyRing  |  Config Connector Documentation  |  Google Cloud](https://cloud.google.com/config-connector/docs/reference/resource-docs/kms/kmskeyring)
 
 KMSCryptoKey
-
+```yaml
 spec:
-
-rotationPeriod: string
+  rotationPeriod: string
+```
 
 KMSKeyRing
-
+```yaml
 N/A
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
-| kms.cnrm.cloud.google.com | KMSCryptoKey | spec.rotationPeriod
- | Equals | 90 days |
+| kms.cnrm.cloud.google.com | KMSCryptoKey | spec.rotationPeriod | Equals | 90 days |
 
 **Terraform:**
 
@@ -188,7 +192,7 @@ N/A
 - Do nothing for 'delete' events
 
 google\_kms\_crypto\_key
-
+```json
     "resource\_changes": [
 
         {
@@ -208,12 +212,14 @@ google\_kms\_crypto\_key
                     "rotation\_period": "7776000s",
 
                 },
+```
 
 google\_kms\_crypto\_key
-
+```json
 N/A
+```
 
-**Access to KMS IAM cryptoKeyVersion.destroy, .restore, and .update permissions must be restricted to authorized Service Accounts and AD groups**
+## Access to KMS IAM cryptoKeyVersion.destroy, .restore, and .update permissions must be restricted to authorized Service Accounts and AD groups
 
 **KCC**
 
@@ -231,7 +237,7 @@ Kind: KMSCryptoKey, KMSKeyRing
 - Do nothing for 'delete' or 'no-op' events
 
 google\_kms\_crypto\_key\_iam\_policy
-
+```json
     "resource\_changes": [
 
         {
@@ -251,9 +257,10 @@ google\_kms\_crypto\_key\_iam\_policy
                     "policy\_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
 
                 },
+```
 
 google\_kms\_crypto\_key\_iam\_binding
-
+```json
     "resource\_changes": [
 
         {
@@ -273,9 +280,10 @@ google\_kms\_crypto\_key\_iam\_binding
                     "role": "roles/cloudkms.cryptoKeyVersion.destroy.update.restore"
 
                 },
+```
 
 google\_kms\_crypto\_key\_iam\_member
-
+```json
     "resource\_changes": [
 
         {
@@ -295,9 +303,10 @@ google\_kms\_crypto\_key\_iam\_member
                     "role": "roles/cloudkms.cryptoKeyVersion.destroy.restore.update"
 
                 },
+```
 
 google\_kms \_key\_ring\_iam\_policy
-
+```json
     "resource\_changes": [
 
         {
@@ -317,9 +326,10 @@ google\_kms \_key\_ring\_iam\_policy
                     "policy\_data": "{\"bindings\":[{\"members\":[\"allAuthenticatedUsers\",\"allUsers\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
 
                 },
+```
 
 google\_kms \_key\_ring\_iam\_binding
-
+```json
     "resource\_changes": [
 
         {
@@ -339,9 +349,10 @@ google\_kms \_key\_ring\_iam\_binding
                     "role": "roles/cloudkms.cryptoKeyVersion.destroy.restore.update"
 
                 },
+```
 
 google\_kms \_key\_ring\_iam\_member
-
+```json
     "resource\_changes": [
 
         {
@@ -361,8 +372,9 @@ google\_kms \_key\_ring\_iam\_member
                     "role": "roles/cloudkms.cryptoKeyVersion.destroy.restore.update"
 
                 },
+```
 
-**DEV and UT Access to PROD KMS Keys must be restricted to approved service accounts/groups**
+## DEV and UT Access to PROD KMS Keys must be restricted to approved service accounts/groups
 
 **KCC**
 
@@ -377,7 +389,7 @@ google\_kms \_key\_ring\_iam\_member
 - Do nothing for 'delete' or 'no-op' events
 
 google\_kms\_crypto\_key\_iam\_policy
-
+```json
     "resource\_changes": [
 
         {
@@ -399,9 +411,10 @@ google\_kms\_crypto\_key\_iam\_policy
                     "policy\_data": "{\"bindings\":[{\"members\":[\"approvedADGroup@email.com\",\"approvedServiceAccount@email.com\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
 
                 },
+```
 
 google\_kms\_crypto\_key\_iam\_binding
-
+```json
     "resource\_changes": [
 
         {
@@ -429,9 +442,10 @@ google\_kms\_crypto\_key\_iam\_binding
                     ],
 
                 },
+```
 
 google\_kms\_crypto\_key\_iam\_member
-
+```json
     "resource\_changes": [
 
         {
@@ -453,9 +467,10 @@ google\_kms\_crypto\_key\_iam\_member
                     "member": "approvedAccounts/Groups",
 
                 },
+```
 
 google\_kms \_key\_ring\_iam\_policy
-
+```json
     "resource\_changes": [
 
         {
@@ -477,9 +492,10 @@ google\_kms \_key\_ring\_iam\_policy
                     "policy\_data": "{\"bindings\":[{\"members\":[\"approvedADGroups\",\"approvedServiceAccounts\"],\"role\":\"roles/cloudkms.cryptoKeyVersion.destroy.restore.update\"}]}"
 
                 },
+```
 
 google\_kms \_key\_ring\_iam\_binding
-
+```json
     "resource\_changes": [
 
         {
@@ -507,9 +523,10 @@ google\_kms \_key\_ring\_iam\_binding
                     ],
 
                 },
+```
 
 google\_kms \_key\_ring\_iam\_member
-
+```json
     "resource\_changes": [
 
         {
@@ -531,8 +548,9 @@ google\_kms \_key\_ring\_iam\_member
                     "member": "approvedServiceAccounts/ADGroups",
 
                 },
+```
 
-**The constraints/gcp.restrictNonCmekServices org policy must be used for Services that support GCP KMS CMEK**
+## The constraints/gcp.restrictNonCmekServices org policy must be used for Services that support GCP KMS CMEK
 
 **Terraform:**
 
@@ -540,6 +558,7 @@ google\_kms \_key\_ring\_iam\_member
 
 - Do nothing for 'delete' or 'no-op' events
 
+```json
     "resource\_changes": [
 
         {
@@ -579,3 +598,4 @@ google\_kms \_key\_ring\_iam\_member
                     ],
 
                 },
+```
