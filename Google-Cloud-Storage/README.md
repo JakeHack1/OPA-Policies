@@ -419,6 +419,7 @@ spec:
   retentionPolicy:
     isLocked: Boolean
     retentionPeriod: integer
+```
 
 | **API** | **Kind** | **Key** | **Conditional** | **Value** |
 | --- | --- | --- | --- | --- |
